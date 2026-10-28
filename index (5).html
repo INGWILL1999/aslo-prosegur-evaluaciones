@@ -1,285 +1,1870 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#173e67">
+<meta name="description" content="Sistema institucional ASLO · PROSEGUR para la gestión y seguimiento de evaluaciones.">
 <title>ASLO · PROSEGUR | Sistema de Evaluaciones</title>
+
 <style>
 :root {
-  color-scheme: light dark;
-  --site-primary: #173e67;
-  --site-on-primary: #ffffff;
-  --site-secondary: #e8f0f7;
-  --site-on-secondary: #18324b;
-  --site-background: #f3f6fa;
-  --site-on-background: #182638;
-  --site-font-body: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --site-font-heading: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  --site-heading-scale: 1;
-  --site-spacing-scale: 1;
-  --site-radius-scale: 1;
-  --site-decoration-opacity: 1;
-  --surface: light-dark(#ffffff, #18222e);
-  --surface-muted: light-dark(#f7f9fc, #202d3b);
-  --line: light-dark(#dbe3ec, #354352);
-  --muted: light-dark(#627286, #a7b5c4);
-  --green: light-dark(#13764e, #69d5a0);
-  --amber: light-dark(#946200, #f2c76c);
-  --blue-soft: light-dark(#edf4fb, #243b52);
+  color-scheme: light;
+  --primary: #173e67;
+  --primary-dark: #102b49;
+  --primary-light: #eaf2fa;
+  --background: #f3f6fa;
+  --surface: #ffffff;
+  --surface-muted: #f7f9fc;
+  --text: #182638;
+  --muted: #627286;
+  --line: #dbe3ec;
+  --green: #13764e;
+  --amber: #946200;
+  --red: #a32929;
+  --radius: 14px;
+  --shadow: 0 18px 45px #0c20370c;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+
 * { box-sizing: border-box; }
-body { margin: 0; font-family: var(--site-font-body); background: var(--site-background); color: var(--site-on-background); }
+
+html { min-height: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--background);
+  color: var(--text);
+}
+
 button, input, select, textarea { font: inherit; }
 button { cursor: pointer; }
-#app { min-height: 100vh; width: 100%; background-color: var(--site-background); color: var(--site-on-background); }
-.topbar { background: var(--site-primary); color: var(--site-on-primary); padding: calc(20px * var(--site-spacing-scale)) clamp(18px, 4vw, 46px); display: flex; align-items: center; justify-content: space-between; gap: 18px; }
-.brand { display:flex; align-items:center; gap:12px; }
-.brandmark { width:44px; height:44px; border-radius:13px; background:rgba(255,255,255,.14); display:grid; place-items:center; border:1px solid rgba(255,255,255,.24); font-weight:800; letter-spacing:-1px; }
-.brand h1 { font-family:var(--site-font-heading); font-size:calc(18px * var(--site-heading-scale)); margin:0; letter-spacing:.2px; }
-.brand p { margin:4px 0 0; font-size:12px; opacity:.8; }
-.top-actions { display:flex; align-items:center; gap:12px; }
-.demo-pill { border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.1); padding:7px 11px; border-radius:999px; font-size:11px; font-weight:700; letter-spacing:.5px; }
-.avatar { display:grid; place-items:center; width:36px; height:36px; border-radius:50%; color:var(--site-primary); background:#fff; font-size:12px; font-weight:800; }
-.layout { display:grid; grid-template-columns:244px minmax(0,1fr); min-height:calc(100vh - 84px); }
-.sidebar { padding:24px 14px; background:var(--surface); border-right:1px solid var(--line); }
-.side-label { color:var(--muted); text-transform:uppercase; letter-spacing:1.2px; font-size:10px; font-weight:800; padding:0 12px; margin:10px 0 10px; }
-.nav { display:grid; gap:5px; }
-.nav button { text-align:left; border:0; color:var(--muted); background:transparent; padding:11px 12px; border-radius:10px; display:flex; align-items:center; gap:11px; font-size:13px; font-weight:600; }
-.nav button.active { color:var(--site-primary); background:var(--blue-soft); }
-.nav .ico { width:20px; text-align:center; font-size:16px; }
-.side-note { margin:28px 5px 0; padding:14px; border-radius:12px; background:var(--surface-muted); border:1px solid var(--line); font-size:11px; line-height:1.6; color:var(--muted); }
-.main { min-width:0; padding:clamp(20px,3vw,36px); max-width:1500px; width:100%; margin:0 auto; }
-.eyebrow { color:var(--muted); font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:1.3px; margin:0 0 8px; }
-.page-head { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; margin-bottom:25px; }
-h2 { font-family:var(--site-font-heading); font-size:calc(28px * var(--site-heading-scale)); letter-spacing:-.8px; margin:0; }
-.subtitle { color:var(--muted); font-size:13px; line-height:1.6; margin:8px 0 0; max-width:650px; }
-.role-switch { display:flex; gap:4px; padding:4px; border:1px solid var(--line); background:var(--surface); border-radius:12px; flex-shrink:0; }
-.role-switch button { border:0; background:transparent; color:var(--muted); padding:9px 12px; border-radius:8px; font-size:12px; font-weight:700; }
-.role-switch button.selected { background:var(--site-primary); color:white; }
-.notice { display:flex; align-items:flex-start; gap:11px; padding:13px 15px; border:1px solid light-dark(#f0d69a,#715b2d); background:light-dark(#fff8e8,#352c1c); color:light-dark(#70500a,#f4d58d); border-radius:12px; font-size:12px; line-height:1.55; margin-bottom:22px; }
-.notice strong { display:block; margin-bottom:2px; }
-.stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin-bottom:22px; }
-.stat { background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:18px; min-width:0; }
-.stat-top { display:flex; justify-content:space-between; align-items:center; gap:8px; color:var(--muted); font-size:11px; font-weight:700; }
-.stat-icon { width:31px; height:31px; display:grid; place-items:center; border-radius:9px; background:var(--blue-soft); color:var(--site-primary); font-size:15px; }
-.stat strong { display:block; font-size:28px; margin:12px 0 3px; letter-spacing:-1px; }
-.stat small { color:var(--muted); font-size:11px; }
-.content-grid { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(270px,1fr); gap:18px; align-items:start; }
-.panel { border:1px solid var(--line); background:var(--surface); border-radius:15px; overflow:hidden; min-width:0; }
-.panel-head { display:flex; justify-content:space-between; align-items:center; padding:18px 20px; border-bottom:1px solid var(--line); gap:12px; }
-.panel-head h3 { font-size:14px; margin:0; }
-.panel-head p { margin:5px 0 0; color:var(--muted); font-size:11px; }
-.text-btn { border:1px solid var(--line); background:var(--surface); color:var(--site-primary); padding:8px 11px; border-radius:8px; font-size:11px; font-weight:800; }
-.table-wrap { overflow-x:auto; }
-table { width:100%; border-collapse:collapse; font-size:12px; }
-th { color:var(--muted); background:var(--surface-muted); font-size:10px; text-transform:uppercase; letter-spacing:.7px; text-align:left; padding:12px 18px; white-space:nowrap; }
-td { padding:14px 18px; border-top:1px solid var(--line); white-space:nowrap; }
-.name-cell { display:flex; align-items:center; gap:10px; }
-.initial { width:30px; height:30px; border-radius:9px; display:grid; place-items:center; background:var(--blue-soft); color:var(--site-primary); font-size:10px; font-weight:800; }
-.name-cell b { display:block; font-size:12px; }
-.name-cell small { display:block; margin-top:3px; color:var(--muted); font-size:10px; }
-.status { display:inline-flex; align-items:center; gap:5px; padding:5px 8px; border-radius:999px; font-size:10px; font-weight:800; }
-.status.pending { background:light-dark(#fff3d5,#3a301b); color:var(--amber); }
-.status.progress { background:light-dark(#e5f3ff,#1e354b); color:light-dark(#245d8c,#93cbf4); }
-.status.done { background:light-dark(#e4f6eb,#1d392c); color:var(--green); }
-.status:before { content:""; width:5px; height:5px; border-radius:50%; background:currentColor; }
-.quick-list { padding:8px 18px 14px; }
-.quick-item { display:flex; align-items:center; gap:12px; padding:13px 0; border-bottom:1px solid var(--line); }
-.quick-item:last-child { border-bottom:0; }
-.quick-ico { width:37px; height:37px; border-radius:11px; background:var(--surface-muted); display:grid; place-items:center; font-size:17px; }
-.quick-copy { flex:1; min-width:0; }
-.quick-copy b { display:block; font-size:12px; }
-.quick-copy small { display:block; margin-top:4px; color:var(--muted); font-size:10px; line-height:1.4; }
-.arrow { color:var(--muted); font-size:18px; }
-.section-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:13px; }
-.module-card { border:1px solid var(--line); border-radius:13px; background:var(--surface); padding:17px; }
-.module-card .module-icon { width:38px; height:38px; border-radius:11px; display:grid; place-items:center; background:var(--blue-soft); color:var(--site-primary); font-size:18px; margin-bottom:14px; }
-.module-card h3 { font-size:13px; margin:0 0 7px; }
-.module-card p { font-size:11px; line-height:1.55; color:var(--muted); margin:0; }
-.module-foot { display:flex; justify-content:space-between; align-items:center; gap:8px; margin-top:15px; padding-top:12px; border-top:1px solid var(--line); color:var(--muted); font-size:10px; }
-.form-panel { max-width:900px; }
-.form-body { padding:20px; }
-.form-section { margin-bottom:24px; }
-.form-section h3 { font-size:13px; margin:0 0 14px; padding-bottom:10px; border-bottom:1px solid var(--line); }
-.form-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
-.field label { display:block; font-size:11px; font-weight:700; margin-bottom:7px; }
-.field input,.field select,.field textarea { width:100%; border:1px solid var(--line); background:var(--surface); color:var(--site-on-background); border-radius:9px; padding:10px 11px; outline:none; font-size:12px; }
-.field textarea { min-height:78px; resize:vertical; }
-.field.full { grid-column:1/-1; }
-.field input:focus,.field select:focus,.field textarea:focus { border-color:var(--site-primary); box-shadow:0 0 0 3px light-dark(#173e671a,#8ab4da22); }
-.form-actions { display:flex; justify-content:space-between; gap:12px; align-items:center; border-top:1px solid var(--line); padding-top:17px; }
-.muted-note { color:var(--muted); font-size:10px; line-height:1.5; }
-.primary-btn { background:var(--site-primary); color:white; border:0; padding:11px 15px; border-radius:9px; font-weight:800; font-size:12px; }
-.secondary-btn { background:var(--surface); color:var(--site-on-background); border:1px solid var(--line); padding:10px 14px; border-radius:9px; font-size:12px; font-weight:700; }
-.toast { display:none; margin-top:14px; border:1px solid light-dark(#b8e4c8,#2f6e4c); color:var(--green); background:light-dark(#edf9f1,#1d3428); border-radius:10px; padding:12px; font-size:12px; }
-.footer { margin-top:24px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; color:var(--muted); font-size:10px; }
-.hidden { display:none !important; }
-.role-switch { display:none !important; }
-.auth-screen { min-height:100vh; display:grid; place-items:center; padding:24px; background:linear-gradient(135deg,#102b49,#1d527f); }
-.auth-card { width:min(100%,440px); background:var(--surface); color:var(--site-on-background); border:1px solid var(--line); border-radius:18px; padding:clamp(24px,5vw,38px); box-shadow:0 24px 70px #06182b55; }
-.auth-brand { display:flex; align-items:center; gap:12px; margin-bottom:25px; }
-.auth-brand .brandmark { background:var(--site-primary); color:#fff; }
-.auth-card h2 { font-size:25px; letter-spacing:-.5px; }
-.auth-card .subtitle { margin-bottom:22px; }
-.auth-card .field { margin-bottom:14px; }
-.auth-card .field input { width:100%; border:1px solid var(--line); background:var(--surface); color:var(--site-on-background); border-radius:9px; padding:12px; font-size:13px; }
-.auth-message { display:none; margin:12px 0; padding:11px; border-radius:9px; font-size:12px; line-height:1.5; }
-.auth-message.error { display:block; color:#a32929; background:#fff0f0; border:1px solid #f1c2c2; }
-.auth-message.info { display:block; color:var(--site-primary); background:var(--blue-soft); border:1px solid var(--line); }
-.auth-foot { margin-top:18px; color:var(--muted); font-size:11px; line-height:1.6; }
-.loading-screen { position:fixed; inset:0; z-index:9999; display:grid; place-items:center; padding:24px; color:#fff; background:radial-gradient(circle at 50% 35%,#245b88 0,#173e67 48%,#0c2037 100%); opacity:1; visibility:visible; transition:opacity .35s ease,visibility .35s ease; }
-.loading-screen.is-hidden { opacity:0; visibility:hidden; pointer-events:none; }
-.loading-content { text-align:center; width:min(100%,360px); animation:welcomeRise .65s ease both; }
-.loading-logo { width:104px; height:104px; margin:0 auto 25px; display:grid; place-items:center; border:2px solid #ffffffa8; border-radius:28px; background:#ffffff16; box-shadow:0 0 0 10px #ffffff0b,0 18px 50px #06182b55; font-size:32px; font-weight:900; letter-spacing:-2px; animation:logoPulse 1.6s ease-in-out infinite; }
-.loading-content h2 { font-size:30px; letter-spacing:-.6px; margin:0 0 9px; }
-.loading-content p { color:#d7e6f5; margin:0; font-size:13px; }
-.loading-track { width:160px; height:4px; margin:25px auto 0; border-radius:99px; overflow:hidden; background:#ffffff35; }
-.loading-track span { display:block; width:40%; height:100%; border-radius:99px; background:#fff; animation:loadingSlide 1s ease-in-out infinite; }
-@keyframes logoPulse { 0%,100% { transform:scale(1); box-shadow:0 0 0 10px #ffffff0b,0 18px 50px #06182b55; } 50% { transform:scale(1.045); box-shadow:0 0 0 15px #ffffff08,0 18px 55px #06182b66; } }
-@keyframes loadingSlide { from { transform:translateX(-110%); } to { transform:translateX(360%); } }
-@keyframes welcomeRise { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
-@media (max-width: 980px) { .layout { grid-template-columns:200px minmax(0,1fr); } .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .content-grid { grid-template-columns:1fr; } .section-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
-@media (max-width: 680px) { .topbar { align-items:flex-start; } .brand h1 { font-size:15px; } .demo-pill { display:none; } .layout { display:block; } .sidebar { border-right:0; border-bottom:1px solid var(--line); padding:10px; overflow-x:auto; } .side-label,.side-note { display:none; } .nav { display:flex; min-width:max-content; } .nav button { padding:10px; } .main { padding:19px 14px; } .page-head { display:block; } .role-switch { margin-top:16px; width:max-content; } .stats { gap:9px; } .stat { padding:13px; } .stat strong { font-size:24px; } .section-grid { grid-template-columns:1fr; } .form-grid { grid-template-columns:1fr; } .field.full { grid-column:auto; } .form-actions { align-items:flex-start; flex-direction:column; } }
+button:disabled { opacity: .65; cursor: wait; }
+button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible {
+  outline: 3px solid #78a9d6;
+  outline-offset: 2px;
+}
+
+.hidden { display: none !important; }
+
+/* Bienvenida y carga */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #fff;
+  background: radial-gradient(circle at 50% 35%,
+    #245b88 0, #173e67 48%, #0c2037 100%);
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .35s ease, visibility .35s ease;
+}
+
+.loading-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.loading-content {
+  width: min(100%, 360px);
+  text-align: center;
+  animation: welcomeRise .6s ease both;
+}
+
+.loading-logo {
+  width: 104px;
+  height: 104px;
+  margin: 0 auto 25px;
+  display: grid;
+  place-items: center;
+  border: 2px solid #ffffffa8;
+  border-radius: 28px;
+  background: #ffffff16;
+  box-shadow: 0 0 0 10px #ffffff0b, 0 18px 50px #06182b55;
+  font-size: 32px;
+  font-weight: 900;
+  letter-spacing: -2px;
+  animation: logoPulse 1.6s ease-in-out infinite;
+}
+
+.loading-content h2 {
+  margin: 0 0 9px;
+  font-size: 30px;
+  letter-spacing: -.6px;
+}
+
+.loading-content p {
+  margin: 0;
+  color: #d7e6f5;
+  font-size: 13px;
+}
+
+.loading-track {
+  width: 160px;
+  height: 4px;
+  margin: 25px auto 0;
+  overflow: hidden;
+  border-radius: 99px;
+  background: #ffffff35;
+}
+
+.loading-track span {
+  display: block;
+  width: 40%;
+  height: 100%;
+  border-radius: 99px;
+  background: #fff;
+  animation: loadingSlide 1s ease-in-out infinite;
+}
+
+@keyframes logoPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.045); }
+}
+
+@keyframes loadingSlide {
+  from { transform: translateX(-110%); }
+  to { transform: translateX(360%); }
+}
+
+@keyframes welcomeRise {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Inicio de sesión */
+.auth-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: linear-gradient(135deg, #102b49, #1d527f);
+}
+
+.auth-card {
+  width: min(100%, 440px);
+  padding: clamp(24px, 5vw, 38px);
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 24px 70px #06182b55;
+}
+
+.auth-brand, .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.auth-brand { margin-bottom: 25px; }
+
+.brandmark {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid #ffffff38;
+  border-radius: 13px;
+  background: #ffffff18;
+  color: #fff;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.auth-brand .brandmark {
+  background: var(--primary);
+  color: #fff;
+}
+
+.auth-brand h1 { margin: 0; font-size: 17px; }
+.auth-brand p { margin: 4px 0 0; color: var(--muted); font-size: 12px; }
+
+.eyebrow {
+  margin: 0 0 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.3px;
+}
+
+.auth-card h2 {
+  margin: 0;
+  font-size: 25px;
+  letter-spacing: -.5px;
+}
+
+.subtitle {
+  max-width: 650px;
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.auth-card .subtitle { margin-bottom: 22px; }
+
+.field { min-width: 0; }
+.auth-card .field { margin-bottom: 14px; }
+
+.field label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.field input, .field select, .field textarea,
+.auth-card .field input {
+  width: 100%;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: #fff;
+  color: var(--text);
+  font-size: 12px;
+}
+
+.auth-card .field input { padding: 12px; font-size: 13px; }
+
+.field textarea { min-height: 78px; resize: vertical; }
+
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px #173e671a;
+}
+
+.primary-btn, .secondary-btn, .text-btn {
+  border-radius: 9px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.primary-btn {
+  padding: 11px 15px;
+  border: 0;
+  background: var(--primary);
+  color: #fff;
+}
+
+.primary-btn:hover { background: #214f7e; }
+
+.secondary-btn {
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--text);
+}
+
+.text-btn {
+  padding: 8px 11px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.auth-message {
+  display: none;
+  margin: 12px 0;
+  padding: 11px;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.auth-message.error {
+  display: block;
+  border: 1px solid #f1c2c2;
+  background: #fff0f0;
+  color: var(--red);
+}
+
+.auth-message.info {
+  display: block;
+  border: 1px solid var(--line);
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.auth-foot {
+  margin-top: 18px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+/* Aplicación */
+#app {
+  min-height: 100vh;
+  width: 100%;
+  background: var(--background);
+  color: var(--text);
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px clamp(18px, 4vw, 46px);
+  background: var(--primary);
+  color: #fff;
+}
+
+.brand h1 { margin: 0; font-size: 18px; letter-spacing: .2px; }
+.brand p { margin: 4px 0 0; font-size: 12px; opacity: .8; }
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.demo-pill {
+  padding: 7px 11px;
+  border: 1px solid #ffffff4d;
+  border-radius: 999px;
+  background: #ffffff12;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: .5px;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--primary);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 244px minmax(0, 1fr);
+  min-height: calc(100vh - 84px);
+}
+
+.sidebar {
+  padding: 24px 14px;
+  border-right: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.side-label {
+  margin: 10px 0;
+  padding: 0 12px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+}
+
+.nav { display: grid; gap: 5px; }
+
+.nav button {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 11px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.nav button:hover { background: var(--surface-muted); }
+
+.nav button.active {
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.nav .ico { width: 20px; text-align: center; font-size: 16px; }
+
+.side-note {
+  margin: 28px 5px 0;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-muted);
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.main {
+  width: 100%;
+  min-width: 0;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: clamp(20px, 3vw, 36px);
+}
+
+.page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 25px;
+}
+
+h2 {
+  margin: 0;
+  font-size: 28px;
+  letter-spacing: -.8px;
+}
+
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  margin-bottom: 22px;
+  padding: 13px 15px;
+  border: 1px solid #f0d69a;
+  border-radius: 12px;
+  background: #fff8e8;
+  color: #70500a;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.notice strong { display: block; margin-bottom: 2px; }
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 22px;
+}
+
+.stat {
+  min-width: 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.stat-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.stat-icon, .module-icon {
+  display: grid;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--primary-light);
+  color: var(--primary);
+}
+
+.stat-icon { width: 31px; height: 31px; font-size: 15px; }
+
+.stat strong {
+  display: block;
+  margin: 12px 0 3px;
+  font-size: 28px;
+  letter-spacing: -1px;
+}
+
+.stat small { color: var(--muted); font-size: 11px; }
+
+.content-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(270px, 1fr);
+  align-items: start;
+  gap: 18px;
+}
+
+.panel {
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-head h3 { margin: 0; font-size: 14px; }
+.panel-head p { margin: 5px 0 0; color: var(--muted); font-size: 11px; }
+
+.table-wrap { overflow-x: auto; }
+
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+
+th {
+  padding: 12px 18px;
+  background: var(--surface-muted);
+  color: var(--muted);
+  text-align: left;
+  white-space: nowrap;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .7px;
+}
+
+td {
+  padding: 14px 18px;
+  border-top: 1px solid var(--line);
+  white-space: nowrap;
+}
+
+.name-cell { display: flex; align-items: center; gap: 10px; }
+
+.initial {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 9px;
+  background: var(--primary-light);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.name-cell b { display: block; font-size: 12px; }
+.name-cell small { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
+
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 800;
+}
+
+.status:before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.status.pending { background: #fff3d5; color: var(--amber); }
+.status.progress { background: #e5f3ff; color: #245d8c; }
+.status.done { background: #e4f6eb; color: var(--green); }
+
+.quick-list { padding: 8px 18px 14px; }
+
+.quick-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.quick-item:last-child { border-bottom: 0; }
+
+.quick-ico {
+  width: 37px;
+  height: 37px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  border-radius: 11px;
+  background: var(--surface-muted);
+  font-size: 17px;
+}
+
+.quick-copy { flex: 1; min-width: 0; }
+.quick-copy b { display: block; font-size: 12px; }
+.quick-copy small { display: block; margin-top: 4px; color: var(--muted); font-size: 10px; line-height: 1.4; }
+
+.section-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 13px;
+}
+
+.module-card {
+  padding: 17px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.module-icon {
+  width: 38px;
+  height: 38px;
+  margin-bottom: 14px;
+  border-radius: 11px;
+  font-size: 18px;
+}
+
+.module-card h3 { margin: 0 0 7px; font-size: 13px; }
+.module-card p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+
+.module-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 10px;
+}
+
+.form-panel { max-width: 1000px; }
+.form-body { padding: 20px; }
+.form-section { margin-bottom: 24px; }
+
+.form-section h3 {
+  margin: 0 0 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+  font-size: 13px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.field.full { grid-column: 1 / -1; }
+
+.form-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 17px;
+  border-top: 1px solid var(--line);
+}
+
+.muted-note { color: var(--muted); font-size: 10px; line-height: 1.5; }
+
+.toast {
+  display: none;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid #b8e4c8;
+  border-radius: 10px;
+  background: #edf9f1;
+  color: var(--green);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 10px;
+}
+
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 200px minmax(0, 1fr); }
+  .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .content-grid { grid-template-columns: 1fr; }
+  .section-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 680px) {
+  .topbar { align-items: flex-start; }
+  .brand h1 { font-size: 15px; }
+  .demo-pill { display: none; }
+  .layout { display: block; }
+  .sidebar {
+    padding: 10px;
+    overflow-x: auto;
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .side-label, .side-note { display: none; }
+  .nav { display: flex; width: max-content; min-width: 100%; }
+  .nav button { width: auto; padding: 10px; white-space: nowrap; }
+  .main { padding: 19px 14px; }
+  .page-head { display: block; }
+  h2 { font-size: 25px; }
+  .stats { gap: 9px; }
+  .stat { padding: 13px; }
+  .stat strong { font-size: 24px; }
+  .section-grid, .form-grid { grid-template-columns: 1fr; }
+  .field.full { grid-column: auto; }
+  .form-actions { align-items: stretch; flex-direction: column; }
+  .panel-head { padding: 15px; }
+  th, td { padding: 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
 </style>
 </head>
+
 <body>
-<div class="loading-screen" id="loadingScreen" role="status" aria-live="polite"><div class="loading-content"><div class="loading-logo">ASLO</div><h2 id="loadingTitle">Bienvenido</h2><p id="loadingSubtitle">Preparando el sistema de evaluaciones</p><div class="loading-track"><span></span></div></div></div>
+
+<!-- Pantalla inicial: tiene tiempo límite de seguridad -->
+<div class="loading-screen" id="loadingScreen" role="status" aria-live="polite">
+  <div class="loading-content">
+    <div class="loading-logo">ASLO</div>
+    <h2 id="loadingTitle">Bienvenido</h2>
+    <p id="loadingSubtitle">Preparando el sistema de evaluaciones</p>
+    <div class="loading-track"><span></span></div>
+  </div>
+</div>
+
+<!-- Inicio de sesión -->
 <section class="auth-screen" id="authScreen">
   <form class="auth-card" id="loginForm">
-    <div class="auth-brand"><div class="brandmark">AS</div><div><h1 style="font-size:17px;margin:0">ASLO · PROSEGUR</h1><p style="font-size:12px;margin:4px 0 0;color:var(--muted)">Sistema integral de evaluaciones</p></div></div>
-    <p class="eyebrow">Acceso institucional</p><h2>Iniciar sesión</h2><p class="subtitle">Ingresa con una cuenta autorizada por el administrador del sistema.</p>
-    <div class="field"><label for="loginEmail">Correo electrónico</label><input id="loginEmail" type="email" autocomplete="username" required placeholder="usuario@empresa.com"></div>
-    <div class="field"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div>
-    <button class="primary-btn" id="loginButton" type="submit" style="width:100%;padding:13px">Entrar de forma segura</button>
+    <div class="auth-brand">
+      <div class="brandmark">AS</div>
+      <div>
+        <h1>ASLO · PROSEGUR</h1>
+        <p>Sistema integral de evaluaciones</p>
+      </div>
+    </div>
+
+    <p class="eyebrow">Acceso institucional</p>
+    <h2>Iniciar sesión</h2>
+    <p class="subtitle">Ingresa con una cuenta autorizada por el administrador del sistema.</p>
+
+    <div class="field">
+      <label for="loginEmail">Correo electrónico</label>
+      <input id="loginEmail" type="email" autocomplete="username"
+        required placeholder="usuario@empresa.com">
+    </div>
+
+    <div class="field">
+      <label for="loginPassword">Contraseña</label>
+      <input id="loginPassword" type="password" autocomplete="current-password"
+        required placeholder="Tu contraseña">
+    </div>
+
+    <button class="primary-btn" id="loginButton" type="submit"
+      style="width:100%;padding:13px">Entrar de forma segura</button>
+
     <div id="authMessage" class="auth-message" role="status" aria-live="polite"></div>
-    <p class="auth-foot">El acceso requiere una cuenta existente en Supabase y un perfil activo autorizado. No se habilita el registro público de usuarios.</p>
+
+    <p class="auth-foot">
+      El acceso requiere una cuenta existente en Supabase y un perfil activo autorizado.
+      No se habilita el registro público de usuarios.
+    </p>
   </form>
 </section>
+
+<!-- Aplicación -->
 <div id="app" style="display:none">
   <header class="topbar">
-    <div class="brand"><div class="brandmark">AS</div><div><h1>ASLO · PROSEGUR</h1><p>Sistema integral de evaluaciones</p></div></div>
-    <div class="top-actions"><span class="demo-pill">VISTA PREVIA · DEMOSTRACIÓN</span><div class="avatar" id="avatar">AD</div></div>
+    <div class="brand">
+      <div class="brandmark">AS</div>
+      <div>
+        <h1>ASLO · PROSEGUR</h1>
+        <p>Sistema integral de evaluaciones</p>
+      </div>
+    </div>
+
+    <div class="top-actions">
+      <span class="demo-pill">VISTA PREVIA · DEMOSTRACIÓN</span>
+      <div class="avatar" id="avatar" aria-label="Iniciales del usuario">AS</div>
+    </div>
   </header>
+
   <div class="layout">
     <aside class="sidebar">
       <div class="side-label">Menú principal</div>
-      <nav class="nav" id="nav">
-        <button class="active" data-page="dashboard"><span class="ico">▦</span>Resumen general</button>
-        <button data-page="candidates"><span class="ico">♙</span>Expedientes</button>
-        <button data-page="capture"><span class="ico">＋</span>Registrar candidato</button>
-        <button data-page="evaluations"><span class="ico">☷</span>Evaluaciones</button>
-        <button data-page="reports"><span class="ico">▤</span>Reportes</button>
-        <button data-page="users" id="usersNav"><span class="ico">♧</span>Usuarios evaluadores</button>
+
+      <nav class="nav" id="nav" aria-label="Menú principal">
+        <button class="active" type="button" data-page="dashboard">
+          <span class="ico">▦</span>Resumen general
+        </button>
+        <button type="button" data-page="candidates">
+          <span class="ico">♙</span>Expedientes
+        </button>
+        <button type="button" data-page="capture">
+          <span class="ico">＋</span>Registrar candidato
+        </button>
+        <button type="button" data-page="evaluations">
+          <span class="ico">☷</span>Evaluaciones
+        </button>
+        <button type="button" data-page="reports">
+          <span class="ico">▤</span>Reportes
+        </button>
+        <button type="button" data-page="users" id="usersNav">
+          <span class="ico">♧</span>Usuarios evaluadores
+        </button>
       </nav>
-      <div class="side-note"><b>Control de acceso</b><br>La versión final debe validar sesión, rol y asignación desde Supabase. Los datos mostrados aquí son ejemplos ilustrativos.</div>
+
+      <div class="side-note">
+        <b>Control de acceso</b><br>
+        La versión final debe validar sesión, rol y asignación desde Supabase.
+        Los expedientes y las métricas de esta vista son ejemplos ilustrativos.
+      </div>
     </aside>
+
     <main class="main">
       <div class="page-head">
-        <div><p class="eyebrow">Panel de control / ASLO–PROSEGUR</p><h2 id="pageTitle">Resumen general</h2><p class="subtitle" id="pageSubtitle">Vista consolidada de expedientes, evaluaciones y seguimiento operativo.</p></div>
-        <div class="role-switch" aria-label="Cambiar perfil de demostración"><button class="selected" data-role="admin">Administrador</button><button data-role="evaluator">Evaluador</button></div>
+        <div>
+          <p class="eyebrow">Panel de control / ASLO–PROSEGUR</p>
+          <h2 id="pageTitle">Resumen general</h2>
+          <p class="subtitle" id="pageSubtitle">
+            Vista consolidada de expedientes, evaluaciones y seguimiento operativo.
+          </p>
+        </div>
       </div>
-      <div class="notice"><span>ⓘ</span><div><strong id="sessionNoticeTitle">Sesión autenticada</strong><span id="sessionNoticeText">La autenticación y el perfil se verifican con Supabase. Las listas y métricas siguen siendo datos ficticios; las consultas de expedientes y las escrituras aún no están habilitadas.</span></div></div>
+
+      <div class="notice">
+        <span>ⓘ</span>
+        <div>
+          <strong id="sessionNoticeTitle">Acceso institucional</strong>
+          <span id="sessionNoticeText">
+            Inicia sesión para verificar tu perfil. Las listas y métricas son de demostración.
+          </span>
+        </div>
+      </div>
+
+      <!-- Resumen -->
       <section id="dashboardPage">
         <div class="stats" id="stats"></div>
+
         <div class="content-grid">
-          <section class="panel"><div class="panel-head"><div><h3 id="tableTitle">Expedientes recientes</h3><p id="tableSubtitle">Ejemplos de seguimiento por candidato</p></div><button class="text-btn" data-go="candidates">Ver expedientes →</button></div><div class="table-wrap"><table><thead><tr><th>Candidato / Folio</th><th>Etapa</th><th>Estado</th><th>Responsable</th></tr></thead><tbody id="caseRows"></tbody></table></div></section>
-          <section class="panel"><div class="panel-head"><div><h3 id="quickTitle">Accesos rápidos</h3><p>Funciones principales del perfil</p></div></div><div class="quick-list" id="quickList"></div></section>
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h3 id="tableTitle">Expedientes recientes</h3>
+                <p id="tableSubtitle">Ejemplos de seguimiento por candidato</p>
+              </div>
+              <button class="text-btn" type="button" data-go="candidates">
+                Ver expedientes →
+              </button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Candidato / Folio</th>
+                    <th>Etapa</th>
+                    <th>Estado</th>
+                    <th>Responsable</th>
+                  </tr>
+                </thead>
+                <tbody id="caseRows"></tbody>
+              </table>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Accesos rápidos</h3>
+                <p>Funciones principales del perfil</p>
+              </div>
+            </div>
+            <div class="quick-list" id="quickList"></div>
+          </section>
         </div>
       </section>
-      <section id="candidatesPage" class="hidden"><div class="panel"><div class="panel-head"><div><h3>Expedientes de candidatos</h3><p>Vista de ejemplo con folio, etapa, asignación y seguimiento.</p></div><button class="text-btn" data-go="capture">＋ Nuevo candidato</button></div><div class="table-wrap"><table><thead><tr><th>Candidato / Folio</th><th>Etapa</th><th>Estado</th><th>Responsable</th></tr></thead><tbody id="allCaseRows"></tbody></table></div></div></section>
-      <section id="capturePage" class="hidden"><div class="panel form-panel"><div class="panel-head"><div><h3>Registro inicial de candidato</h3><p>Formulario de demostración · datos generales y asignación</p></div><span class="status progress">Borrador visual</span></div><form id="candidateForm" class="form-body"><div class="form-section"><h3>01 · Datos generales</h3><div class="form-grid"><div class="field"><label for="folio">Folio del expediente *</label><input id="folio" required placeholder="Ej. ASLO-2026-001"></div><div class="field"><label for="candidateName">Nombre completo *</label><input id="candidateName" required placeholder="Nombre y apellidos"></div><div class="field"><label for="position">Puesto solicitado</label><input id="position" placeholder="Puesto o vacante"></div><div class="field"><label for="company">Empresa / cliente</label><select id="company"><option>ASLO - PROSEGUR</option><option>Prosegur</option><option>Otro cliente</option></select></div><div class="field"><label for="phone">Teléfono de contacto</label><input id="phone" type="tel" placeholder="Número de contacto"></div><div class="field"><label for="email">Correo electrónico</label><input id="email" type="email" placeholder="correo@ejemplo.com"></div></div></div><div class="form-section"><h3>02 · Información laboral</h3><div class="form-grid"><div class="field"><label for="birthDate">Fecha de nacimiento</label><input id="birthDate" type="date"></div><div class="field"><label for="civilStatus">Estado civil</label><select id="civilStatus"><option value="">Seleccionar</option><option>Soltero(a)</option><option>Casado(a)</option><option>Unión libre</option><option>Divorciado(a)</option><option>Viudo(a)</option><option>Otro</option></select></div><div class="field"><label for="address">Domicilio</label><input id="address" placeholder="Domicilio del candidato"></div><div class="field"><label for="education">Escolaridad</label><input id="education" placeholder="Último grado de estudios"></div><div class="field"><label for="lastJob">Último empleo</label><input id="lastJob" placeholder="Empresa o puesto anterior"></div><div class="field"><label for="experience">Experiencia laboral</label><input id="experience" placeholder="Años o resumen de experiencia"></div></div></div><div class="form-section"><h3>03 · Evaluación socioeconómica</h3><div class="form-grid"><div class="field"><label for="household">Personas que habitan el domicilio</label><input id="household" type="number" min="0" placeholder="Cantidad"></div><div class="field"><label for="dependents">Personas dependientes económicamente</label><input id="dependents" type="number" min="0" placeholder="Cantidad"></div><div class="field"><label for="income">Ingreso mensual aproximado</label><input id="income" type="number" min="0" placeholder="Importe en moneda local"></div><div class="field"><label for="expenses">Gasto mensual aproximado</label><input id="expenses" type="number" min="0" placeholder="Importe en moneda local"></div><div class="field full"><label for="socioNotes">Observaciones socioeconómicas</label><textarea id="socioNotes" placeholder="Observaciones pertinentes y autorizadas para la evaluación"></textarea></div></div></div><div class="form-section"><h3>04 · Información médica (acceso restringido)</h3><div class="form-grid"><div class="field"><label for="medicalStatus">Estado de captura médica</label><select id="medicalStatus"><option value="">Sin capturar</option><option>Pendiente de valoración</option><option>En revisión por personal autorizado</option><option>Concluida</option></select></div><div class="field"><label for="medicalDate">Fecha de valoración</label><input id="medicalDate" type="date"></div><div class="field full"><label for="medicalNotes">Observaciones médicas autorizadas</label><textarea id="medicalNotes" placeholder="Captura solo la información requerida por el proceso y autorizada para este perfil."></textarea></div></div></div><div class="form-section"><h3>05 · Asignación y seguimiento</h3><div class="form-grid"><div class="field"><label for="evaluator">Evaluador responsable</label><select id="evaluator"><option>Evaluador de demostración</option><option>Sin asignar</option></select></div><div class="field"><label for="dueDate">Fecha objetivo</label><input id="dueDate" type="date"></div><div class="field full"><label for="notes">Observaciones iniciales</label><textarea id="notes" placeholder="Notas operativas iniciales, sin incluir información sensible innecesaria."></textarea></div></div></div><div class="form-actions"><span class="muted-note">Prototipo de captura: no ingreses información real de candidatos. La conexión con Supabase y los permisos por sección deben validarse antes de su uso.</span><div><button class="secondary-btn" type="reset">Limpiar</button> <button class="primary-btn" type="submit">Probar formulario</button></div></div><div class="toast" id="formToast" role="status"></div></form></div></section>
-      <section id="evaluationsPage" class="hidden"><div class="section-grid" id="moduleCards"></div></section>
-      <section id="reportsPage" class="hidden"><div class="content-grid"><div class="panel"><div class="panel-head"><div><h3>Seguimiento de evaluaciones</h3><p>Resumen ilustrativo de secciones por expediente</p></div></div><div class="quick-list" id="reportList"></div></div><div class="panel"><div class="panel-head"><div><h3>Etapas previstas</h3><p>Flujo de revisión</p></div></div><div class="quick-list"><div class="quick-item"><div class="quick-ico">1</div><div class="quick-copy"><b>Captura inicial</b><small>Datos generales y laborales</small></div><span class="status progress">Inicio</span></div><div class="quick-item"><div class="quick-ico">2</div><div class="quick-copy"><b>Evaluaciones especializadas</b><small>Médica, socioeconómica, psicológica y toxicológica</small></div><span class="status pending">Proceso</span></div><div class="quick-item"><div class="quick-ico">3</div><div class="quick-copy"><b>Revisión y cierre</b><small>Observaciones, resultado y reporte</small></div><span class="status pending">Pendiente</span></div></div></div></div></section>
-      <section id="usersPage" class="hidden"><div class="content-grid"><div class="panel"><div class="panel-head"><div><h3>Usuarios evaluadores</h3><p>Ejemplo de administración de acceso</p></div><button class="text-btn" id="addUserBtn">＋ Simular alta</button></div><div class="table-wrap"><table><thead><tr><th>Usuario</th><th>Rol</th><th>Estado</th></tr></thead><tbody id="userRows"></tbody></table></div></div><div class="panel"><div class="panel-head"><div><h3>Controles previstos</h3><p>Seguridad y administración</p></div></div><div class="quick-list"><div class="quick-item"><div class="quick-ico">🔐</div><div class="quick-copy"><b>Acceso autorizado</b><small>Sesión autenticada y rol validado.</small></div></div><div class="quick-item"><div class="quick-ico">🗂️</div><div class="quick-copy"><b>Asignación de expedientes</b><small>El evaluador solo ve sus expedientes asignados.</small></div></div><div class="quick-item"><div class="quick-ico">🧾</div><div class="quick-copy"><b>Auditoría</b><small>Registrar acciones importantes y cambios.</small></div></div></div></div></div></section>
-      <footer class="footer"><span id="sessionUserLabel">ASLO · PROSEGUR</span><button class="text-btn" id="logoutButton" type="button">Cerrar sesión</button><span>Autenticación Supabase · Datos de expedientes aún ilustrativos</span></footer>
+
+      <!-- Expedientes -->
+      <section id="candidatesPage" class="hidden">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <h3>Expedientes de candidatos</h3>
+              <p>Vista de ejemplo con folio, etapa, asignación y seguimiento.</p>
+            </div>
+            <button class="text-btn" type="button" data-go="capture">
+              ＋ Nuevo candidato
+            </button>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Candidato / Folio</th>
+                  <th>Etapa</th>
+                  <th>Estado</th>
+                  <th>Responsable</th>
+                </tr>
+              </thead>
+              <tbody id="allCaseRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Registro de candidato -->
+      <section id="capturePage" class="hidden">
+        <div class="panel form-panel">
+          <div class="panel-head">
+            <div>
+              <h3>Registro inicial de candidato</h3>
+              <p>Formulario de demostración · datos generales y asignación</p>
+            </div>
+            <span class="status progress">Borrador visual</span>
+          </div>
+
+          <form id="candidateForm" class="form-body">
+            <div class="form-section">
+              <h3>01 · Datos generales</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="folio">Folio del expediente *</label>
+                  <input id="folio" required placeholder="Ej. ASLO-2026-001">
+                </div>
+                <div class="field">
+                  <label for="candidateName">Nombre completo *</label>
+                  <input id="candidateName" required placeholder="Nombre y apellidos">
+                </div>
+                <div class="field">
+                  <label for="position">Puesto solicitado</label>
+                  <input id="position" placeholder="Puesto o vacante">
+                </div>
+                <div class="field">
+                  <label for="company">Empresa / cliente</label>
+                  <select id="company">
+                    <option>ASLO - PROSEGUR</option>
+                    <option>Prosegur</option>
+                    <option>Otro cliente</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="phone">Teléfono de contacto</label>
+                  <input id="phone" type="tel" placeholder="Número de contacto">
+                </div>
+                <div class="field">
+                  <label for="email">Correo electrónico</label>
+                  <input id="email" type="email" placeholder="correo@ejemplo.com">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>02 · Información laboral</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="birthDate">Fecha de nacimiento</label>
+                  <input id="birthDate" type="date">
+                </div>
+                <div class="field">
+                  <label for="civilStatus">Estado civil</label>
+                  <select id="civilStatus">
+                    <option value="">Seleccionar</option>
+                    <option>Soltero(a)</option>
+                    <option>Casado(a)</option>
+                    <option>Unión libre</option>
+                    <option>Divorciado(a)</option>
+                    <option>Viudo(a)</option>
+                    <option>Otro</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="address">Domicilio</label>
+                  <input id="address" placeholder="Domicilio del candidato">
+                </div>
+                <div class="field">
+                  <label for="education">Escolaridad</label>
+                  <input id="education" placeholder="Último grado de estudios">
+                </div>
+                <div class="field">
+                  <label for="lastJob">Último empleo</label>
+                  <input id="lastJob" placeholder="Empresa o puesto anterior">
+                </div>
+                <div class="field">
+                  <label for="experience">Experiencia laboral</label>
+                  <input id="experience" placeholder="Años o resumen de experiencia">
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>03 · Evaluación socioeconómica</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="household">Personas que habitan el domicilio</label>
+                  <input id="household" type="number" min="0" placeholder="Cantidad">
+                </div>
+                <div class="field">
+                  <label for="dependents">Personas dependientes económicamente</label>
+                  <input id="dependents" type="number" min="0" placeholder="Cantidad">
+                </div>
+                <div class="field">
+                  <label for="income">Ingreso mensual aproximado</label>
+                  <input id="income" type="number" min="0" placeholder="Importe en moneda local">
+                </div>
+                <div class="field">
+                  <label for="expenses">Gasto mensual aproximado</label>
+                  <input id="expenses" type="number" min="0" placeholder="Importe en moneda local">
+                </div>
+                <div class="field full">
+                  <label for="socioNotes">Observaciones socioeconómicas</label>
+                  <textarea id="socioNotes"
+                    placeholder="Observaciones pertinentes y autorizadas para la evaluación"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>04 · Información médica (acceso restringido)</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="medicalStatus">Estado de captura médica</label>
+                  <select id="medicalStatus">
+                    <option value="">Sin capturar</option>
+                    <option>Pendiente de valoración</option>
+                    <option>En revisión por personal autorizado</option>
+                    <option>Concluida</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="medicalDate">Fecha de valoración</label>
+                  <input id="medicalDate" type="date">
+                </div>
+                <div class="field full">
+                  <label for="medicalNotes">Observaciones médicas autorizadas</label>
+                  <textarea id="medicalNotes"
+                    placeholder="Captura solo información requerida y autorizada para este perfil."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>05 · Asignación y seguimiento</h3>
+              <div class="form-grid">
+                <div class="field">
+                  <label for="evaluator">Evaluador responsable</label>
+                  <select id="evaluator">
+                    <option>Evaluador de demostración</option>
+                    <option>Sin asignar</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="dueDate">Fecha objetivo</label>
+                  <input id="dueDate" type="date">
+                </div>
+                <div class="field full">
+                  <label for="notes">Observaciones iniciales</label>
+                  <textarea id="notes"
+                    placeholder="Notas operativas iniciales, sin información sensible innecesaria."></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <span class="muted-note">
+                Prototipo de captura: no ingreses información real de candidatos.
+                Este formulario no guarda ni envía datos a Supabase.
+              </span>
+              <div>
+                <button class="secondary-btn" type="reset">Limpiar</button>
+                <button class="primary-btn" type="submit">Probar formulario</button>
+              </div>
+            </div>
+
+            <div class="toast" id="formToast" role="status" aria-live="polite"></div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Evaluaciones -->
+      <section id="evaluationsPage" class="hidden">
+        <div class="section-grid" id="moduleCards"></div>
+      </section>
+
+      <!-- Reportes -->
+      <section id="reportsPage" class="hidden">
+        <div class="content-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Seguimiento de evaluaciones</h3>
+                <p>Resumen ilustrativo de secciones por expediente</p>
+              </div>
+            </div>
+            <div class="quick-list" id="reportList"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Etapas previstas</h3>
+                <p>Flujo de revisión</p>
+              </div>
+            </div>
+            <div class="quick-list">
+              <div class="quick-item">
+                <div class="quick-ico">1</div>
+                <div class="quick-copy">
+                  <b>Captura inicial</b>
+                  <small>Datos generales y laborales</small>
+                </div>
+                <span class="status progress">Inicio</span>
+              </div>
+              <div class="quick-item">
+                <div class="quick-ico">2</div>
+                <div class="quick-copy">
+                  <b>Evaluaciones especializadas</b>
+                  <small>Médica, socioeconómica, psicológica y toxicológica</small>
+                </div>
+                <span class="status pending">Proceso</span>
+              </div>
+              <div class="quick-item">
+                <div class="quick-ico">3</div>
+                <div class="quick-copy">
+                  <b>Revisión y cierre</b>
+                  <small>Observaciones, resultado y reporte</small>
+                </div>
+                <span class="status pending">Pendiente</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Usuarios -->
+      <section id="usersPage" class="hidden">
+        <div class="content-grid">
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Usuarios evaluadores</h3>
+                <p>Ejemplo de administración de acceso</p>
+              </div>
+              <button class="text-btn" id="addUserBtn" type="button">＋ Simular alta</button>
+            </div>
+
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Usuario</th><th>Rol</th><th>Estado</th></tr>
+                </thead>
+                <tbody id="userRows"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <div>
+                <h3>Controles previstos</h3>
+                <p>Seguridad y administración</p>
+              </div>
+            </div>
+            <div class="quick-list">
+              <div class="quick-item">
+                <div class="quick-ico">🔐</div>
+                <div class="quick-copy">
+                  <b>Acceso autorizado</b>
+                  <small>Sesión autenticada y rol validado.</small>
+                </div>
+              </div>
+              <div class="quick-item">
+                <div class="quick-ico">🗂️</div>
+                <div class="quick-copy">
+                  <b>Asignación de expedientes</b>
+                  <small>El evaluador solo debe ver sus expedientes asignados.</small>
+                </div>
+              </div>
+              <div class="quick-item">
+                <div class="quick-ico">🧾</div>
+                <div class="quick-copy">
+                  <b>Auditoría</b>
+                  <small>Registrar acciones importantes y cambios.</small>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span id="sessionUserLabel">ASLO · PROSEGUR</span>
+        <button class="text-btn" id="logoutButton" type="button">Cerrar sesión</button>
+        <span>Supabase Auth · Datos de expedientes ilustrativos</span>
+      </footer>
     </main>
   </div>
 </div>
+
+<!-- Supabase -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <script>
-const SUPABASE_URL='https://aolkfjwlpmrnhokiyzxo.supabase.co';
-const SUPABASE_PUBLIC_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvbGtmandscG1ybmhva2l5enhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMzYxNDEsImV4cCI6MjEwODcxMjE0MX0.yr9pbAjFNcUaXGgQwUB9jLbJuv1Z9Gjg7xltoMiPNPk';
-const supabaseClient=window.supabase?.createClient(SUPABASE_URL,SUPABASE_PUBLIC_KEY);
-let authenticatedUser=null, authenticatedProfile=null;
-function authMessage(message,type='error'){const el=document.getElementById('authMessage');el.textContent=message;el.className='auth-message '+type;}
-function setAuthBusy(busy){const btn=document.getElementById('loginButton');btn.disabled=busy;btn.textContent=busy?'Verificando acceso…':'Entrar de forma segura';}
-async function verifyProfile(user){
- const {data,error}=await supabaseClient.from('profiles').select('id,full_name,role,active').eq('id',user.id).maybeSingle();
- if(error) throw new Error('No fue posible verificar el perfil en la tabla profiles. Revisa la política de lectura del propio perfil. No se habilitó el acceso a los módulos.');
- if(!data || data.active!==true) throw new Error('La cuenta no tiene un perfil activo autorizado. Contacta al administrador.');
- const normalized=String(data.role||'').toLowerCase();
- if(!['admin','administrator','administrador','evaluator','evaluador'].includes(normalized)) throw new Error('El rol del perfil no está reconocido. El acceso se bloqueó por seguridad.');
- return data;
-}
-async function showAuthenticatedApp(user,profile){
- authenticatedUser=user; authenticatedProfile=profile;
- const normalized=String(profile.role||'').toLowerCase(); role=['admin','administrator','administrador'].includes(normalized)?'admin':'evaluator';
- $('authScreen').style.display='none'; $('app').style.display='block';
- $('sessionUserLabel').textContent=(profile.full_name||user.email||'Usuario autorizado')+' · '+(role==='admin'?'Administrador':'Evaluador');
- $('avatar').textContent=(profile.full_name||user.email||'US').split(/[\s@._-]+/).filter(Boolean).slice(0,2).map(x=>x[0].toUpperCase()).join('');
- $('sessionNoticeTitle').textContent='Acceso autenticado · Perfil verificado';
- $('sessionNoticeText').textContent='Supabase confirmó la sesión y el perfil activo. Las métricas y filas de ejemplo siguen siendo ficticias; las consultas reales y la captura persistente permanecen deshabilitadas hasta validar el esquema y las políticas de cada módulo.';
- page='dashboard'; render(); showLoading(`Bienvenido, ${role==='admin'?'Administrador':'Evaluador'}`,'Preparando tu menú principal',1100);
-}
-async function signOutToLogin(){if(supabaseClient) await supabaseClient.auth.signOut();authenticatedUser=null;authenticatedProfile=null;$('app').style.display='none';$('authScreen').style.display='grid';$('loginPassword').value='';}
-document.getElementById('loginForm').addEventListener('submit',async event=>{
- event.preventDefault(); if(!supabaseClient){authMessage('No se pudo cargar la biblioteca de Supabase. Revisa la conexión a internet y vuelve a intentarlo.');return;}
- setAuthBusy(true);authMessage('Conectando y validando el perfil…','info');
- try{const {data,error}=await supabaseClient.auth.signInWithPassword({email:document.getElementById('loginEmail').value.trim(),password:document.getElementById('loginPassword').value});if(error)throw new Error('No se pudo iniciar sesión. Verifica el correo y la contraseña, y confirma que la cuenta esté autorizada.');const profile=await verifyProfile(data.user);await showAuthenticatedApp(data.user,profile);}
- catch(error){await supabaseClient?.auth.signOut();authMessage(error.message||'No fue posible validar el acceso.');}
- finally{setAuthBusy(false);}
-});
-document.getElementById('logoutButton').addEventListener('click',signOutToLogin);
+'use strict';
+
+/*
+ * ASLO · PROSEGUR
+ * La autenticación consulta Supabase.
+ * Las listas, expedientes, reportes y usuarios de esta versión son ejemplos.
+ * No se realizan escrituras en la base de datos.
+ */
+
+const SUPABASE_URL = 'https://aolkfjwlpmrnhokiyzxo.supabase.co';
+const SUPABASE_PUBLIC_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFvbGtmandscG1ybmhva2l5enhvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTMxMzYxNDEsImV4cCI6MjEwODcxMjE0MX0.yr9pbAjFNcUaXGgQwUB9jLbJuv1Z9Gjg7xltoMiPNPk';
+
+const $ = id => document.getElementById(id);
+
+let supabaseClient = null;
+let authenticatedUser = null;
+let authenticatedProfile = null;
+let role = 'admin';
+let page = 'dashboard';
+let extraUser = false;
+let loadingTimer = null;
+let authBusy = false;
+
 const cases = [
- {name:'Candidato de demostración A',folio:'ASLO-2026-001',stage:'Datos generales',status:'En proceso',kind:'progress',owner:'Evaluador demo'},
- {name:'Candidato de demostración B',folio:'ASLO-2026-002',stage:'Socioeconómica',status:'Pendiente',kind:'pending',owner:'Sin asignar'},
- {name:'Candidato de demostración C',folio:'ASLO-2026-003',stage:'Revisión',status:'Completado',kind:'done',owner:'Evaluador demo'}
+  {
+    name: 'Candidato de demostración A',
+    folio: 'ASLO-2026-001',
+    stage: 'Datos generales',
+    status: 'En proceso',
+    kind: 'progress',
+    owner: 'Evaluador demo'
+  },
+  {
+    name: 'Candidato de demostración B',
+    folio: 'ASLO-2026-002',
+    stage: 'Socioeconómica',
+    status: 'Pendiente',
+    kind: 'pending',
+    owner: 'Sin asignar'
+  },
+  {
+    name: 'Candidato de demostración C',
+    folio: 'ASLO-2026-003',
+    stage: 'Revisión',
+    status: 'Completado',
+    kind: 'done',
+    owner: 'Evaluador demo'
+  }
 ];
+
 const modules = [
- {icon:'♙',title:'Datos generales y laborales',desc:'Identificación, contacto, puesto solicitado y antecedentes laborales.',meta:'Expediente base'},
- {icon:'⌂',title:'Evaluación socioeconómica',desc:'Domicilio, composición familiar, ingresos, egresos y datos de contexto autorizados.',meta:'Información restringida'},
- {icon:'✚',title:'Evaluación médica',desc:'Captura estructurada de la información médica requerida y sus observaciones.',meta:'Información sensible'},
- {icon:'◉',title:'Evaluación psicológica',desc:'Registro de resultados y observaciones conforme al proceso autorizado.',meta:'Acceso controlado'},
- {icon:'⌁',title:'Evaluación toxicológica',desc:'Registro del estado del proceso y resultados autorizados.',meta:'Acceso controlado'},
- {icon:'▤',title:'Reporte y conclusión',desc:'Concentrado de avance, pendientes, observaciones y cierre de expediente.',meta:'Revisión final'}
+  {
+    icon: '♙',
+    title: 'Datos generales y laborales',
+    desc: 'Identificación, contacto, puesto solicitado y antecedentes laborales.',
+    meta: 'Expediente base'
+  },
+  {
+    icon: '⌂',
+    title: 'Evaluación socioeconómica',
+    desc: 'Domicilio, composición familiar, ingresos, egresos y datos autorizados.',
+    meta: 'Información restringida'
+  },
+  {
+    icon: '✚',
+    title: 'Evaluación médica',
+    desc: 'Captura estructurada de la información médica requerida y sus observaciones.',
+    meta: 'Información sensible'
+  },
+  {
+    icon: '◉',
+    title: 'Evaluación psicológica',
+    desc: 'Registro de resultados y observaciones conforme al proceso autorizado.',
+    meta: 'Acceso controlado'
+  },
+  {
+    icon: '⌁',
+    title: 'Evaluación toxicológica',
+    desc: 'Registro del estado del proceso y resultados autorizados.',
+    meta: 'Acceso controlado'
+  },
+  {
+    icon: '▤',
+    title: 'Reporte y conclusión',
+    desc: 'Concentrado de avance, pendientes, observaciones y cierre de expediente.',
+    meta: 'Revisión final'
+  }
 ];
-let role='admin', page='dashboard', extraUser=false;
-const $=id=>document.getElementById(id);
-function statusBadge(c){return `<span class="status ${c.kind}">${c.status}</span>`}
-function rows(list){return list.map((c,i)=>`<tr><td><div class="name-cell"><span class="initial">${c.name.split(' ').map(x=>x[0]).slice(0,2).join('')}</span><span><b>${c.name}</b><small>${c.folio}</small></span></div></td><td>${c.stage}</td><td>${statusBadge(c)}</td><td>${c.owner}</td></tr>`).join('')}
-function render(){
- document.querySelectorAll('[data-role]').forEach(b=>b.classList.toggle('selected',b.dataset.role===role));
- $('avatar').textContent=role==='admin'?'AD':'EV';
- $('usersNav').classList.toggle('hidden',role!=='admin');
- if(role==='evaluator' && page==='users') page='dashboard';
- document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===page));
- document.querySelectorAll('main > section').forEach(s=>s.classList.add('hidden'));
- const section=$(page+'Page'); if(section)section.classList.remove('hidden');
- const titles={dashboard:['Resumen general','Vista consolidada de expedientes, evaluaciones y seguimiento operativo.'],candidates:['Expedientes de candidatos','Consulta de casos y su estado de seguimiento.'],capture:['Registrar candidato','Captura inicial de información general y asignación del expediente.'],evaluations:['Módulos de evaluación','Secciones previstas para completar el expediente del candidato.'],reports:['Reportes y seguimiento','Visión del avance por etapa y pendientes de revisión.'],users:['Usuarios evaluadores','Administración de usuarios y asignaciones de acceso.']};
- $('pageTitle').textContent=titles[page][0]; $('pageSubtitle').textContent=titles[page][1];
- const stats=role==='admin'?[['Expedientes de ejemplo','03','Registros ilustrativos','▣'],['En proceso','01','Captura o evaluación','◷'],['Pendientes','01','Requieren seguimiento','!'],['Evaluadores','02','Usuarios de demostración','♧']]:[['Mis expedientes','02','Asignados en el ejemplo','▣'],['En proceso','01','En captura o evaluación','◷'],['Pendientes','01','Por completar','!'],['Secciones','06','Módulos previstos','☷']];
- $('stats').innerHTML=stats.map(s=>`<div class="stat"><div class="stat-top"><span>${s[0]}</span><span class="stat-icon">${s[3]}</span></div><strong>${s[1]}</strong><small>${s[2]}</small></div>`).join('');
- const visible=role==='admin'?cases:cases.filter(c=>c.owner==='Evaluador demo');
- $('caseRows').innerHTML=rows(visible.slice(0,3)); $('allCaseRows').innerHTML=rows(visible);
- $('tableTitle').textContent=role==='admin'?'Expedientes recientes':'Mis expedientes asignados'; $('tableSubtitle').textContent=role==='admin'?'Vista de seguimiento general':'Solo casos de ejemplo asignados al evaluador';
- const quick=role==='admin'?[['♧','Administrar evaluadores','Crear cuentas y controlar el estado de acceso.','users'],['♙','Asignar expedientes','Vincular un candidato con un evaluador responsable.','candidates'],['▤','Revisar reportes','Consultar avances y resultados de los expedientes.','reports']]:[['＋','Registrar candidato','Iniciar expediente y capturar datos generales.','capture'],['☷','Completar evaluaciones','Entrar a las secciones médicas y socioeconómicas, entre otras.','evaluations'],['▤','Ver seguimiento','Consultar etapas pendientes de mis expedientes.','reports']];
- $('quickList').innerHTML=quick.map(q=>`<div class="quick-item"><div class="quick-ico">${q[0]}</div><div class="quick-copy"><b>${q[1]}</b><small>${q[2]}</small></div><button class="text-btn" data-go="${q[3]}">Abrir</button></div>`).join('');
- $('moduleCards').innerHTML=modules.map(m=>`<article class="module-card"><div class="module-icon">${m.icon}</div><h3>${m.title}</h3><p>${m.desc}</p><div class="module-foot"><span>${m.meta}</span><span>Planeado ↗</span></div></article>`).join('');
- $('reportList').innerHTML=modules.map((m,i)=>`<div class="quick-item"><div class="quick-ico">${m.icon}</div><div class="quick-copy"><b>${m.title}</b><small>${i===0?'Inicio de expediente':i===5?'Pendiente de cierre':'Etapa prevista en el flujo'}</small></div><span class="status ${i===0?'progress':'pending'}">${i===0?'Inicio':'Pendiente'}</span></div>`).join('');
- const users=[['Administrador de demostración','Administrador','Activo'],['Evaluador de demostración','Evaluador','Activo']]; if(extraUser)users.push(['Nuevo evaluador de ejemplo','Evaluador','Simulado']);
- $('userRows').innerHTML=users.map(u=>`<tr><td><div class="name-cell"><span class="initial">${u[0].split(' ').map(x=>x[0]).slice(0,2).join('')}</span><span><b>${u[0]}</b><small>Cuenta de ejemplo</small></span></div></td><td>${u[1]}</td><td><span class="status ${u[2]==='Activo'?'done':'pending'}">${u[2]}</span></td></tr>`).join('');
- document.querySelectorAll('[data-go]').forEach(b=>{b.onclick=()=>go(b.dataset.go)});
+
+function authMessage(message, type = 'error') {
+  const el = $('authMessage');
+  if (!el) return;
+  el.textContent = message;
+  el.className = 'auth-message ' + type;
 }
-function showLoading(title='Cargando',subtitle='Preparando módulo…',duration=650){const screen=$('loadingScreen');$('loadingTitle').textContent=title;$('loadingSubtitle').textContent=subtitle;screen.classList.remove('is-hidden');clearTimeout(window.asloLoadingTimer);window.asloLoadingTimer=setTimeout(()=>screen.classList.add('is-hidden'),duration)}
-function go(p){page=p;render();const title=({dashboard:'Resumen general',candidates:'Expedientes',capture:'Registro de candidato',evaluations:'Evaluaciones',reports:'Reportes',users:'Usuarios evaluadores'})[p]||'Módulo';showLoading('Cargando',title,700);window.scrollTo({top:0,behavior:'smooth'})}
-document.querySelectorAll('[data-role]').forEach(b=>b.addEventListener('click',()=>{role=b.dataset.role;page='dashboard';render();showLoading('Cargando menú principal',`Preparando el panel de ${role==='admin'?'Administrador':'Evaluador'}`,700)}));
-document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
-$('candidateForm').addEventListener('submit',e=>{e.preventDefault();const name=$('candidateName').value.trim(),folio=$('folio').value.trim();$('formToast').style.display='block';$('formToast').textContent=`Demostración correcta: se capturaron visualmente los datos de ${name} (${folio}). No se guardaron ni se enviaron a Supabase.`;});
-$('addUserBtn').addEventListener('click',()=>{extraUser=true;render();alert('Alta simulada únicamente para la presentación. No se creó una cuenta real.');});
+
+function setAuthBusy(busy) {
+  authBusy = busy;
+  const btn = $('loginButton');
+  if (!btn) return;
+  btn.disabled = busy;
+  btn.textContent = busy ? 'Verificando acceso…' : 'Entrar de forma segura';
+}
+
+function hideLoading() {
+  const screen = $('loadingScreen');
+  if (screen) screen.classList.add('is-hidden');
+  if (loadingTimer) {
+    clearTimeout(loadingTimer);
+    loadingTimer = null;
+  }
+}
+
+function showLoading(title = 'Cargando', subtitle = 'Preparando módulo…', duration = 700) {
+  const screen = $('loadingScreen');
+  if (!screen) return;
+
+  $('loadingTitle').textContent = title;
+  $('loadingSubtitle').textContent = subtitle;
+  screen.classList.remove('is-hidden');
+
+  if (loadingTimer) clearTimeout(loadingTimer);
+
+  loadingTimer = setTimeout(() => {
+    screen.classList.add('is-hidden');
+    loadingTimer = null;
+  }, duration);
+}
+
+function getInitials(name) {
+  return String(name || 'ASLO')
+    .split(/[\s@._-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(part => part.charAt(0).toUpperCase())
+    .join('');
+}
+
+function escapeHTML(value) {
+  return String(value ?? '').replace(/[&<>"']/g, char => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  })[char]);
+}
+
+async function verifyProfile(user) {
+  if (!supabaseClient) {
+    throw new Error('No se pudo inicializar Supabase. Recarga la página y verifica tu conexión.');
+  }
+
+  const { data, error } = await supabaseClient
+    .from('profiles')
+    .select('id,full_name,role,active')
+    .eq('id', user.id)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(
+      'No fue posible verificar el perfil en la tabla profiles. ' +
+      'Revisa la estructura de la tabla y los permisos de lectura del perfil.'
+    );
+  }
+
+  if (!data || data.active !== true) {
+    throw new Error(
+      'La cuenta no tiene un perfil activo autorizado. Contacta al administrador.'
+    );
+  }
+
+  const normalized = String(data.role || '').toLowerCase();
+
+  if (![
+    'admin',
+    'administrator',
+    'administrador',
+    'evaluator',
+    'evaluador'
+  ].includes(normalized)) {
+    throw new Error('El rol del perfil no está reconocido. El acceso se bloqueó por seguridad.');
+  }
+
+  return data;
+}
+
+function isAdminRole(profile) {
+  const normalized = String(profile?.role || '').toLowerCase();
+  return ['admin', 'administrator', 'administrador'].includes(normalized);
+}
+
+async function showAuthenticatedApp(user, profile) {
+  authenticatedUser = user;
+  authenticatedProfile = profile;
+  role = isAdminRole(profile) ? 'admin' : 'evaluator';
+  page = 'dashboard';
+
+  $('authScreen').style.display = 'none';
+  $('app').style.display = 'block';
+
+  const displayName = profile.full_name || user.email || 'Usuario autorizado';
+
+  $('sessionUserLabel').textContent =
+    displayName + ' · ' + (role === 'admin' ? 'Administrador' : 'Evaluador');
+
+  $('avatar').textContent = getInitials(displayName);
+
+  $('sessionNoticeTitle').textContent = 'Acceso autenticado · Perfil verificado';
+  $('sessionNoticeText').textContent =
+    'Supabase confirmó la sesión y el perfil activo. ' +
+    'Las métricas y filas mostradas son de ejemplo; la consulta real de expedientes ' +
+    'y el almacenamiento de formularios aún no están habilitados.';
+
+  render();
+
+  showLoading(
+    'Bienvenido',
+    'Preparando el menú de ' + (role === 'admin' ? 'Administrador' : 'Evaluador'),
+    850
+  );
+}
+
+async function signOutToLogin() {
+  try {
+    if (supabaseClient) {
+      await supabaseClient.auth.signOut();
+    }
+  } catch (error) {
+    console.error('Error al cerrar la sesión:', error);
+  } finally {
+    authenticatedUser = null;
+    authenticatedProfile = null;
+    $('app').style.display = 'none';
+    $('authScreen').style.display = 'grid';
+    $('loginPassword').value = '';
+    $('loginEmail').focus();
+    authMessage('La sesión se ha cerrado.', 'info');
+    hideLoading();
+  }
+}
+
+function statusBadge(item) {
+  return '<span class="status ' + escapeHTML(item.kind) + '">' +
+    escapeHTML(item.status) + '</span>';
+}
+
+function rows(list) {
+  return list.map(item => {
+    const initials = getInitials(item.name);
+    return '<tr>' +
+      '<td><div class="name-cell">' +
+        '<span class="initial">' + escapeHTML(initials) + '</span>' +
+        '<span><b>' + escapeHTML(item.name) + '</b>' +
+        '<small>' + escapeHTML(item.folio) + '</small></span>' +
+      '</div></td>' +
+      '<td>' + escapeHTML(item.stage) + '</td>' +
+      '<td>' + statusBadge(item) + '</td>' +
+      '<td>' + escapeHTML(item.owner) + '</td>' +
+    '</tr>';
+  }).join('');
+}
+
+function render() {
+  const displayName =
+    authenticatedProfile?.full_name ||
+    authenticatedUser?.email ||
+    (role === 'admin' ? 'Administrador' : 'Evaluador');
+
+  // Mantener las iniciales reales del usuario autenticado.
+  $('avatar').textContent = getInitials(displayName);
+
+  $('sessionUserLabel').textContent =
+    displayName + ' · ' + (role === 'admin' ? 'Administrador' : 'Evaluador');
+
+  $('usersNav').classList.toggle('hidden', role !== 'admin');
+
+  if (role !== 'admin' && page === 'users') {
+    page = 'dashboard';
+  }
+
+  document.querySelectorAll('#nav button').forEach(button => {
+    button.classList.toggle('active', button.dataset.page === page);
+  });
+
+  document.querySelectorAll('main > section').forEach(section => {
+    section.classList.add('hidden');
+  });
+
+  const activeSection = $(page + 'Page');
+  if (activeSection) activeSection.classList.remove('hidden');
+
+  const titles = {
+    dashboard: [
+      'Resumen general',
+      'Vista consolidada de expedientes, evaluaciones y seguimiento operativo.'
+    ],
+    candidates: [
+      'Expedientes de candidatos',
+      'Consulta de casos y su estado de seguimiento.'
+    ],
+    capture: [
+      'Registrar candidato',
+      'Captura inicial de información general y asignación del expediente.'
+    ],
+    evaluations: [
+      'Módulos de evaluación',
+      'Secciones previstas para completar el expediente del candidato.'
+    ],
+    reports: [
+      'Reportes y seguimiento',
+      'Visión del avance por etapa y pendientes de revisión.'
+    ],
+    users: [
+      'Usuarios evaluadores',
+      'Administración de usuarios y asignaciones de acceso.'
+    ]
+  };
+
+  $('pageTitle').textContent = titles[page][0];
+  $('pageSubtitle').textContent = titles[page][1];
+
+  const stats = role === 'admin'
+    ? [
+        ['Expedientes de ejemplo', '03', 'Registros ilustrativos', '▣'],
+        ['En proceso', '01', 'Captura o evaluación', '◷'],
+        ['Pendientes', '01', 'Requieren seguimiento', '!'],
+        ['Evaluadores', '02', 'Usuarios de demostración', '♧']
+      ]
+    : [
+        ['Mis expedientes', '02', 'Asignados en el ejemplo', '▣'],
+        ['En proceso', '01', 'En captura o evaluación', '◷'],
+        ['Pendientes', '01', 'Por completar', '!'],
+        ['Secciones', '06', 'Módulos previstos', '☷']
+      ];
+
+  $('stats').innerHTML = stats.map(item =>
+    '<div class="stat">' +
+      '<div class="stat-top"><span>' + escapeHTML(item[0]) + '</span>' +
+      '<span class="stat-icon">' + escapeHTML(item[3]) + '</span></div>' +
+      '<strong>' + escapeHTML(item[1]) + '</strong>' +
+      '<small>' + escapeHTML(item[2]) + '</small>' +
+    '</div>'
+  ).join('');
+
+  const visibleCases = role === 'admin'
+    ? cases
+    : cases.filter(item => item.owner === 'Evaluador demo');
+
+  $('caseRows').innerHTML = rows(visibleCases.slice(0, 3));
+  $('allCaseRows').innerHTML = rows(visibleCases);
+
+  $('tableTitle').textContent = role === 'admin'
+    ? 'Expedientes recientes'
+    : 'Mis expedientes asignados';
+
+  $('tableSubtitle').textContent = role === 'admin'
+    ? 'Vista de seguimiento general'
+    : 'Solo casos de ejemplo asignados al evaluador';
+
+  const quick = role === 'admin'
+    ? [
+        ['♧', 'Administrar evaluadores', 'Crear cuentas y controlar el estado de acceso.', 'users'],
+        ['♙', 'Asignar expedientes', 'Vincular un candidato con un evaluador responsable.', 'candidates'],
+        ['▤', 'Revisar reportes', 'Consultar avances y resultados de los expedientes.', 'reports']
+      ]
+    : [
+        ['＋', 'Registrar candidato', 'Iniciar expediente y capturar datos generales.', 'capture'],
+        ['☷', 'Completar evaluaciones', 'Consultar las secciones previstas para la evaluación.', 'evaluations'],
+        ['▤', 'Ver seguimiento', 'Consultar etapas pendientes de los expedientes de ejemplo.', 'reports']
+      ];
+
+  $('quickList').innerHTML = quick.map(item =>
+    '<div class="quick-item">' +
+      '<div class="quick-ico">' + escapeHTML(item[0]) + '</div>' +
+      '<div class="quick-copy"><b>' + escapeHTML(item[1]) + '</b>' +
+      '<small>' + escapeHTML(item[2]) + '</small></div>' +
+      '<button class="text-btn" type="button" data-go="' +
+      escapeHTML(item[3]) + '">Abrir</button>' +
+    '</div>'
+  ).join('');
+
+  $('moduleCards').innerHTML = modules.map(item =>
+    '<article class="module-card">' +
+      '<div class="module-icon">' + escapeHTML(item.icon) + '</div>' +
+      '<h3>' + escapeHTML(item.title) + '</h3>' +
+      '<p>' + escapeHTML(item.desc) + '</p>' +
+      '<div class="module-foot"><span>' + escapeHTML(item.meta) +
+      '</span><span>Planeado</span></div>' +
+    '</article>'
+  ).join('');
+
+  $('reportList').innerHTML = modules.map((item, index) =>
+    '<div class="quick-item">' +
+      '<div class="quick-ico">' + escapeHTML(item.icon) + '</div>' +
+      '<div class="quick-copy"><b>' + escapeHTML(item.title) + '</b>' +
+      '<small>' +
+      (index === 0 ? 'Inicio de expediente' :
+       index === 5 ? 'Pendiente de cierre' : 'Etapa prevista en el flujo') +
+      '</small></div>' +
+      '<span class="status ' + (index === 0 ? 'progress' : 'pending') + '">' +
+      (index === 0 ? 'Inicio' : 'Pendiente') + '</span>' +
+    '</div>'
+  ).join('');
+
+  const users = [
+    ['Administrador de demostración', 'Administrador', 'Activo'],
+    ['Evaluador de demostración', 'Evaluador', 'Activo']
+  ];
+
+  if (extraUser) {
+    users.push(['Nuevo evaluador de ejemplo', 'Evaluador', 'Simulado']);
+  }
+
+  $('userRows').innerHTML = users.map(item =>
+    '<tr><td><div class="name-cell">' +
+      '<span class="initial">' + escapeHTML(getInitials(item[0])) + '</span>' +
+      '<span><b>' + escapeHTML(item[0]) + '</b><small>Cuenta de ejemplo</small></span>' +
+    '</div></td><td>' + escapeHTML(item[1]) + '</td><td>' +
+      '<span class="status ' + (item[2] === 'Activo' ? 'done' : 'pending') + '">' +
+      escapeHTML(item[2]) + '</span></td></tr>'
+  ).join('');
+}
+
+function go(nextPage) {
+  const allowedPages = [
+    'dashboard', 'candidates', 'capture', 'evaluations', 'reports', 'users'
+  ];
+
+  if (!allowedPages.includes(nextPage)) return;
+  if (nextPage === 'users' && role !== 'admin') return;
+
+  page = nextPage;
+  render();
+
+  const moduleTitles = {
+    dashboard: 'Resumen general',
+    candidates: 'Expedientes',
+    capture: 'Registro de candidato',
+    evaluations: 'Evaluaciones',
+    reports: 'Reportes',
+    users: 'Usuarios evaluadores'
+  };
+
+  showLoading('Cargando', moduleTitles[nextPage] || 'Preparando módulo', 650);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* Inicio de sesión */
+$('loginForm').addEventListener('submit', async event => {
+  event.preventDefault();
+
+  if (authBusy) return;
+
+  if (!supabaseClient) {
+    authMessage(
+      'No se pudo cargar la biblioteca de Supabase. Comprueba tu conexión a internet.'
+    );
+    return;
+  }
+
+  setAuthBusy(true);
+  authMessage('Conectando y validando el perfil…', 'info');
+
+  try {
+    const email = $('loginEmail').value.trim();
+    const password = $('loginPassword').value;
+
+    const { data, error } = await supabaseClient.auth.signInWithPassword({
+      email,
+      password
+    });
+
+    if (error || !data?.user) {
+      throw new Error(
+        'No se pudo iniciar sesión. Verifica el correo y la contraseña, ' +
+        'y confirma que la cuenta esté autorizada.'
+      );
+    }
+
+    const profile = await verifyProfile(data.user);
+    await showAuthenticatedApp(data.user, profile);
+  } catch (error) {
+    try {
+      await supabaseClient?.auth.signOut();
+    } catch (_) {
+      // Se conserva el mensaje de error original.
+    }
+
+    authMessage(error.message || 'No fue posible validar el acceso.');
+  } finally {
+    setAuthBusy(false);
+  }
+});
+
+/* Navegación */
+$('nav').addEventListener('click', event => {
+  const button = event.target.closest('button[data-page]');
+  if (button) go(button.dataset.page);
+});
+
+/* Botones de accesos rápidos y enlaces de módulo */
+document.addEventListener('click', event => {
+  const button = event.target.closest('button[data-go]');
+  if (button) go(button.dataset.go);
+});
+
+/* Formulario demostrativo: no escribe en Supabase */
+$('candidateForm').addEventListener('submit', event => {
+  event.preventDefault();
+
+  const name = $('candidateName').value.trim();
+  const folio = $('folio').value.trim();
+  const toast = $('formToast');
+
+  toast.style.display = 'block';
+  toast.textContent =
+    'Demostración correcta: se capturaron visualmente los datos de ' +
+    name + ' (' + folio + '). No se guardaron ni se enviaron a Supabase.';
+});
+
+$('candidateForm').addEventListener('reset', () => {
+  $('formToast').style.display = 'none';
+  $('formToast').textContent = '';
+});
+
+/* Alta simulada de evaluador */
+$('addUserBtn').addEventListener('click', () => {
+  extraUser = true;
+  render();
+  window.alert(
+    'Alta simulada únicamente para la presentación. No se creó una cuenta real.'
+  );
+});
+
+/* Cierre de sesión */
+$('logoutButton').addEventListener('click', signOutToLogin);
+
+/* Inicialización segura */
+async function initializeApp() {
+  // Mostrar la bienvenida durante un periodo breve.
+  showLoading('Bienvenido', 'Preparando el sistema ASLO · PROSEGUR', 1600);
+
+  try {
+    if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+      authMessage(
+        'No se pudo cargar la biblioteca de Supabase. ' +
+        'Comprueba tu conexión y que el CDN no esté bloqueado.'
+      );
+      return;
+    }
+
+    supabaseClient = window.supabase.createClient(
+      SUPABASE_URL,
+      SUPABASE_PUBLIC_KEY
+    );
+
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error) {
+      console.error('No se pudo recuperar la sesión:', error.message);
+      authMessage('No fue posible comprobar la sesión existente. Puedes iniciar sesión nuevamente.');
+      return;
+    }
+
+    if (data?.session?.user) {
+      try {
+        const profile = await verifyProfile(data.session.user);
+        await showAuthenticatedApp(data.session.user, profile);
+      } catch (error) {
+        await supabaseClient.auth.signOut();
+        authMessage(error.message || 'No se pudo verificar el perfil.');
+      }
+    }
+  } catch (error) {
+    console.error('Error al iniciar ASLO · PROSEGUR:', error);
+    authMessage(
+      'Ocurrió un problema al iniciar el sistema. ' +
+      'Recarga la página y revisa la consola del navegador si continúa.'
+    );
+  } finally {
+    // Garantiza que la pantalla de carga nunca bloquee el acceso.
+    hideLoading();
+  }
+
+  if (supabaseClient) {
+    supabaseClient.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' && !session) {
+        authenticatedUser = null;
+        authenticatedProfile = null;
+        $('app').style.display = 'none';
+        $('authScreen').style.display = 'grid';
+        $('loginPassword').value = '';
+        hideLoading();
+      }
+    });
+  }
+}
+
+/*
+ * Salvaguarda independiente: si algún error no controlado ocurre,
+ * la pantalla inicial se oculta para no dejar un fondo bloqueando la web.
+ */
+window.addEventListener('error', event => {
+  console.error('Error de JavaScript:', event.message);
+  hideLoading();
+});
+
+window.addEventListener('unhandledrejection', event => {
+  console.error('Promesa rechazada:', event.reason);
+  hideLoading();
+});
+
+// Construir las secciones antes de consultar la sesión.
 render();
-window.addEventListener('load',()=>showLoading('Bienvenido','Preparando el sistema ASLO · PROSEGUR',1700));
-if(!supabaseClient){authMessage('La biblioteca de Supabase no se cargó. Comprueba tu conexión y que el CDN no esté bloqueado.');}
-else{supabaseClient.auth.getSession().then(async({data,error})=>{if(error||!data.session)return;try{const profile=await verifyProfile(data.session.user);await showAuthenticatedApp(data.session.user,profile);}catch(e){await supabaseClient.auth.signOut();authMessage(e.message||'No se pudo verificar el perfil.');}});supabaseClient.auth.onAuthStateChange((event,session)=>{if(event==='SIGNED_OUT'){authenticatedUser=null;authenticatedProfile=null;$('app').style.display='none';$('authScreen').style.display='grid';}});}
+
+// Límite adicional para la bienvenida inicial.
+setTimeout(hideLoading, 2500);
+
+// Iniciar la aplicación cuando el DOM esté listo.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initializeApp, { once: true });
+} else {
+  initializeApp();
+}
 </script>
 </body>
 </html>
