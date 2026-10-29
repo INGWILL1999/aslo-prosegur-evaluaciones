@@ -144,6 +144,7 @@ td { padding:14px 18px; border-top:1px solid var(--line); white-space:nowrap; }
 </head>
 <body>
 <div class="loading-screen" id="loadingScreen" role="status" aria-live="polite"><div class="loading-content"><div class="loading-logo">ASLO</div><h2 id="loadingTitle">Bienvenido</h2><p id="loadingSubtitle">Preparando el sistema de evaluaciones</p><div class="loading-track"><span></span></div></div></div>
+<script>/* Respaldo: nunca dejar la pantalla de bienvenida bloqueando el acceso */ window.setTimeout(function(){ var s=document.getElementById("loadingScreen"); if(s) s.classList.add("is-hidden"); }, 2500);</script>
 <section class="auth-screen" id="authScreen">
   <form class="auth-card" id="loginForm">
     <div class="auth-brand"><div class="brandmark">AS</div><div><h1 style="font-size:17px;margin:0">ASLO · PROSEGUR</h1><p style="font-size:12px;margin:4px 0 0;color:var(--muted)">Sistema integral de evaluaciones</p></div></div>
