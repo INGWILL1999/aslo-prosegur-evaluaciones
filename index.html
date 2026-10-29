@@ -140,6 +140,12 @@ td { padding:14px 18px; border-top:1px solid var(--line); white-space:nowrap; }
 @keyframes welcomeRise { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:translateY(0); } }
 @media (max-width: 980px) { .layout { grid-template-columns:200px minmax(0,1fr); } .stats { grid-template-columns:repeat(2,minmax(0,1fr)); } .content-grid { grid-template-columns:1fr; } .section-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width: 680px) { .topbar { align-items:flex-start; } .brand h1 { font-size:15px; } .demo-pill { display:none; } .layout { display:block; } .sidebar { border-right:0; border-bottom:1px solid var(--line); padding:10px; overflow-x:auto; } .side-label,.side-note { display:none; } .nav { display:flex; min-width:max-content; } .nav button { padding:10px; } .main { padding:19px 14px; } .page-head { display:block; } .role-switch { margin-top:16px; width:max-content; } .stats { gap:9px; } .stat { padding:13px; } .stat strong { font-size:24px; } .section-grid { grid-template-columns:1fr; } .form-grid { grid-template-columns:1fr; } .field.full { grid-column:auto; } .form-actions { align-items:flex-start; flex-direction:column; } }
+
+/* Identidad visual y crédito institucional */
+.brandmark { font-size:11px; letter-spacing:-.5px; }
+.footer .developer-credit { display:flex; flex-direction:column; gap:2px; text-align:center; font-size:9px; line-height:1.35; opacity:.82; }
+.auth-credit { position:fixed; bottom:8px; left:12px; right:12px; z-index:3; text-align:center; color:#d7e6f5; font-size:9px; line-height:1.4; opacity:.82; pointer-events:none; }
+@media (max-width:680px) { .footer .developer-credit { width:100%; order:3; } .auth-credit { font-size:8px; bottom:5px; } }
 </style>
 </head>
 <body>
@@ -147,7 +153,7 @@ td { padding:14px 18px; border-top:1px solid var(--line); white-space:nowrap; }
 <script>/* Respaldo: nunca dejar la pantalla de bienvenida bloqueando el acceso */ window.setTimeout(function(){ var s=document.getElementById("loadingScreen"); if(s) s.classList.add("is-hidden"); }, 2500);</script>
 <section class="auth-screen" id="authScreen">
   <form class="auth-card" id="loginForm">
-    <div class="auth-brand"><div class="brandmark">AS</div><div><h1 style="font-size:17px;margin:0">ASLO · PROSEGUR</h1><p style="font-size:12px;margin:4px 0 0;color:var(--muted)">Sistema integral de evaluaciones</p></div></div>
+    <div class="auth-brand"><div class="brandmark">ASLO</div><div><h1 style="font-size:17px;margin:0">ASLO · PROSEGUR</h1><p style="font-size:12px;margin:4px 0 0;color:var(--muted)">Sistema integral de evaluaciones</p></div></div>
     <p class="eyebrow">Acceso institucional</p><h2>Iniciar sesión</h2><p class="subtitle">Ingresa con una cuenta autorizada por el administrador del sistema.</p>
     <div class="field"><label for="loginEmail">Correo electrónico</label><input id="loginEmail" type="email" autocomplete="username" required placeholder="usuario@empresa.com"></div>
     <div class="field"><label for="loginPassword">Contraseña</label><input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Tu contraseña"></div>
@@ -155,10 +161,11 @@ td { padding:14px 18px; border-top:1px solid var(--line); white-space:nowrap; }
     <div id="authMessage" class="auth-message" role="status" aria-live="polite"></div>
     <p class="auth-foot">El acceso requiere una cuenta existente en Supabase y un perfil activo autorizado. No se habilita el registro público de usuarios.</p>
   </form>
+  <div class="auth-credit">Desarrollado por Ing. William Alvarez · Departamento de Tecnología (TI) y Ciberseguridad</div>
 </section>
 <div id="app" style="display:none">
   <header class="topbar">
-    <div class="brand"><div class="brandmark">AS</div><div><h1>ASLO · PROSEGUR</h1><p>Sistema integral de evaluaciones</p></div></div>
+    <div class="brand"><div class="brandmark">ASLO</div><div><h1>ASLO · PROSEGUR</h1><p>Sistema integral de evaluaciones</p></div></div>
     <div class="top-actions"><span class="demo-pill">VISTA PREVIA · DEMOSTRACIÓN</span><div class="avatar" id="avatar">AD</div></div>
   </header>
   <div class="layout">
@@ -192,7 +199,7 @@ td { padding:14px 18px; border-top:1px solid var(--line); white-space:nowrap; }
       <section id="evaluationsPage" class="hidden"><div class="section-grid" id="moduleCards"></div></section>
       <section id="reportsPage" class="hidden"><div class="content-grid"><div class="panel"><div class="panel-head"><div><h3>Seguimiento de evaluaciones</h3><p>Resumen ilustrativo de secciones por expediente</p></div></div><div class="quick-list" id="reportList"></div></div><div class="panel"><div class="panel-head"><div><h3>Etapas previstas</h3><p>Flujo de revisión</p></div></div><div class="quick-list"><div class="quick-item"><div class="quick-ico">1</div><div class="quick-copy"><b>Captura inicial</b><small>Datos generales y laborales</small></div><span class="status progress">Inicio</span></div><div class="quick-item"><div class="quick-ico">2</div><div class="quick-copy"><b>Evaluaciones especializadas</b><small>Médica, socioeconómica, psicológica y toxicológica</small></div><span class="status pending">Proceso</span></div><div class="quick-item"><div class="quick-ico">3</div><div class="quick-copy"><b>Revisión y cierre</b><small>Observaciones, resultado y reporte</small></div><span class="status pending">Pendiente</span></div></div></div></div></section>
       <section id="usersPage" class="hidden"><div class="content-grid"><div class="panel form-panel"><div class="panel-head"><div><h3>Crear acceso de evaluador</h3><p>Alta de cuenta desde el panel administrador.</p></div></div><form id="evaluatorForm" class="form-body"><div class="form-grid"><div class="field full"><label for="newEvaluatorName">Nombre completo *</label><input id="newEvaluatorName" required maxlength="120"></div><div class="field"><label for="newEvaluatorEmail">Correo electrónico *</label><input id="newEvaluatorEmail" type="email" required maxlength="254"></div><div class="field"><label for="newEvaluatorPassword">Contraseña temporal *</label><input id="newEvaluatorPassword" type="password" required minlength="8" autocomplete="new-password"></div><div class="field full"><label for="newEvaluatorActive">Estado inicial</label><select id="newEvaluatorActive"><option value="true">Activo</option><option value="false">Inactivo</option></select></div></div><div class="form-actions"><span class="muted-note">Requiere desplegar la Edge Function segura incluida. No coloques la clave service_role en el navegador.</span><button class="primary-btn" id="createEvaluatorBtn" type="submit">Crear acceso</button></div><div class="toast" id="userToast" role="status"></div></form></div><div class="panel"><div class="panel-head"><div><h3>Control de acceso</h3><p>Permisos por rol</p></div></div><div class="quick-list"><div class="quick-item"><div class="quick-ico">🔐</div><div class="quick-copy"><b>Solo administrador</b><small>El servidor valida el rol antes de crear cuentas.</small></div></div><div class="quick-item"><div class="quick-ico">🗂️</div><div class="quick-copy"><b>Expedientes asignados</b><small>Las asignaciones reales requieren tablas y políticas RLS.</small></div></div></div></div></div><div class="panel" style="margin-top:18px"><div class="panel-head"><div><h3>Cuentas registradas</h3><p>Perfiles existentes en Supabase.</p></div><button class="text-btn" id="refreshUsersBtn" type="button">Actualizar lista</button></div><div class="table-wrap"><table><thead><tr><th>Usuario</th><th>ID</th><th>Rol</th><th>Estado</th></tr></thead><tbody id="userRows"><tr><td colspan="4">Actualiza la lista después de iniciar sesión.</td></tr></tbody></table></div></div></section>
-      <footer class="footer"><span id="sessionUserLabel">ASLO · PROSEGUR</span><button class="text-btn" id="logoutButton" type="button">Cerrar sesión</button><span>Autenticación Supabase · Datos de expedientes aún ilustrativos</span></footer>
+      <footer class="footer"><span id="sessionUserLabel">ASLO · PROSEGUR</span><div class="developer-credit"><span>Desarrollado por Ing. William Alvarez</span><span>Departamento de Tecnología (TI) y Ciberseguridad</span></div><button class="text-btn" id="logoutButton" type="button">Cerrar sesión</button><span>Autenticación Supabase · Datos de expedientes aún ilustrativos</span></footer>
     </main>
   </div>
 </div>
