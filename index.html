@@ -275,7 +275,7 @@ function go(p){if(p==='users'&&role!=='admin')p='dashboard';page=p;render();if(p
 // El rol proviene del perfil verificado en Supabase; no se puede cambiar desde la interfaz.
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
 $('candidateForm').addEventListener('submit',e=>{e.preventDefault();const name=$('candidateName').value.trim(),folio=$('folio').value.trim();$('formToast').style.display='block';$('formToast').textContent=`Demostración correcta: se capturaron visualmente los datos de ${name} (${folio}). No se guardaron ni se enviaron a Supabase.`;});
-render();alert('Alta simulada únicamente para la presentación. No se creó una cuenta real.');});
+
 
 function escapeHtml(v){return String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 async function loadRealProfiles(){
