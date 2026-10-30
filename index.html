@@ -220,7 +220,28 @@ td { padding:14px 18px; border-top:1px solid var(--line); white-space:nowrap; }
         </div>
         <div class="section-grid" id="moduleCards"></div>
       </section>
-      <section id="reportsPage" class="hidden"><div class="content-grid"><div class="panel"><div class="panel-head"><div><h3>Seguimiento de evaluaciones</h3><p>Resumen ilustrativo de secciones por expediente</p></div></div><div class="quick-list" id="reportList"></div></div><div class="panel"><div class="panel-head"><div><h3>Etapas previstas</h3><p>Flujo de revisión</p></div></div><div class="quick-list"><div class="quick-item"><div class="quick-ico">1</div><div class="quick-copy"><b>Captura inicial</b><small>Datos generales y laborales</small></div><span class="status progress">Inicio</span></div><div class="quick-item"><div class="quick-ico">2</div><div class="quick-copy"><b>Evaluaciones especializadas</b><small>Médica, socioeconómica, psicológica y toxicológica</small></div><span class="status pending">Proceso</span></div><div class="quick-item"><div class="quick-ico">3</div><div class="quick-copy"><b>Revisión y cierre</b><small>Observaciones, resultado y reporte</small></div><span class="status pending">Pendiente</span></div></div></div></div></section>
+      <section id="reportsPage" class="hidden">
+        <div class="content-grid">
+          <div class="panel"><div class="panel-head"><div><h3>Seguimiento de evaluaciones</h3><p>Resumen ilustrativo de secciones por expediente</p></div></div><div class="quick-list" id="reportList"></div></div>
+          <div class="panel"><div class="panel-head"><div><h3>Etapas previstas</h3><p>Flujo de revisión</p></div></div><div class="quick-list"><div class="quick-item"><div class="quick-ico">1</div><div class="quick-copy"><b>Captura inicial</b><small>Datos generales y laborales</small></div><span class="status progress">Inicio</span></div><div class="quick-item"><div class="quick-ico">2</div><div class="quick-copy"><b>Evaluaciones especializadas</b><small>Médica, socioeconómica, psicológica y toxicológica</small></div><span class="status pending">Proceso</span></div><div class="quick-item"><div class="quick-ico">3</div><div class="quick-copy"><b>Revisión y cierre</b><small>Observaciones, resultado y reporte</small></div><span class="status pending">Pendiente</span></div></div></div>
+        </div>
+        <div class="panel" id="adminPdfPanel" style="margin-top:18px">
+          <div class="panel-head"><div><h3>Generación de reportes PDF</h3><p>Herramientas exclusivas del administrador</p></div><span class="status done">Solo administrador</span></div>
+          <div class="form-body">
+            <p class="muted-note" style="font-size:12px">Selecciona y completa el expediente en el módulo <b>Evaluaciones</b>. Desde aquí podrás preparar el reporte completo para imprimirlo o guardarlo como PDF.</p>
+            <div class="form-grid">
+              <div class="field"><label>Folio del expediente</label><input id="pdfFolioPreview" readonly placeholder="Se tomará del módulo Evaluaciones"></div>
+              <div class="field"><label>Nombre del candidato</label><input id="pdfCandidatePreview" readonly placeholder="Se tomará del módulo Evaluaciones"></div>
+            </div>
+            <div class="form-actions" style="margin-top:16px">
+              <span class="muted-note">En la ventana de impresión selecciona “Guardar como PDF” para descargar el documento.</span>
+              <div><button class="secondary-btn" type="button" id="refreshPdfPreview">Actualizar datos</button> <button class="primary-btn" type="button" id="printCandidatePdf">Imprimir / Guardar PDF</button></div>
+            </div>
+            <div class="toast" id="pdfToast" role="status"></div>
+            <p class="muted-note" style="margin-top:12px">Nota técnica: este código todavía trabaja con capturas locales de demostración; no consulta expedientes guardados en Supabase. El PDF se genera con los datos actualmente capturados en pantalla. La consulta de expedientes históricos requiere conectar el módulo a las tablas reales y sus políticas RLS.</p>
+          </div>
+        </div>
+      </section>
       <section id="usersPage" class="hidden"><div class="content-grid"><div class="panel form-panel"><div class="panel-head"><div><h3>Crear acceso de evaluador</h3><p>Alta de cuenta desde el panel administrador.</p></div></div><form id="evaluatorForm" class="form-body"><div class="form-grid"><div class="field full"><label for="newEvaluatorName">Nombre completo *</label><input id="newEvaluatorName" required maxlength="120"></div><div class="field"><label for="newEvaluatorEmail">Correo electrónico *</label><input id="newEvaluatorEmail" type="email" required maxlength="254"></div><div class="field"><label for="newEvaluatorPassword">Contraseña temporal *</label><input id="newEvaluatorPassword" type="password" required minlength="8" autocomplete="new-password"></div><div class="field full"><label for="newEvaluatorActive">Estado inicial</label><select id="newEvaluatorActive"><option value="true">Activo</option><option value="false">Inactivo</option></select></div></div><div class="form-actions"><span class="muted-note">Requiere desplegar la Edge Function segura incluida. No coloques la clave service_role en el navegador.</span><button class="primary-btn" id="createEvaluatorBtn" type="submit">Crear acceso</button></div><div class="toast" id="userToast" role="status"></div></form></div><div class="panel"><div class="panel-head"><div><h3>Control de acceso</h3><p>Permisos por rol</p></div></div><div class="quick-list"><div class="quick-item"><div class="quick-ico">🔐</div><div class="quick-copy"><b>Solo administrador</b><small>El servidor valida el rol antes de crear cuentas.</small></div></div><div class="quick-item"><div class="quick-ico">🗂️</div><div class="quick-copy"><b>Expedientes asignados</b><small>Las asignaciones reales requieren tablas y políticas RLS.</small></div></div></div></div></div><div class="panel" style="margin-top:18px"><div class="panel-head"><div><h3>Cuentas registradas</h3><p>Perfiles existentes en Supabase.</p></div><button class="text-btn" id="refreshUsersBtn" type="button">Actualizar lista</button></div><div class="table-wrap"><table><thead><tr><th>Usuario</th><th>ID</th><th>Rol</th><th>Estado</th></tr></thead><tbody id="userRows"><tr><td colspan="4">Actualiza la lista después de iniciar sesión.</td></tr></tbody></table></div></div></section>
       <footer class="footer"><span id="sessionUserLabel">ASLO · PROSEGUR</span><div class="developer-credit"><span>Desarrollado por Ing. William Alvarez</span><span>Departamento de Tecnología (TI) y Ciberseguridad</span></div><button class="text-btn" id="logoutButton" type="button">Cerrar sesión</button><span>Autenticación Supabase · Datos de expedientes aún ilustrativos</span></footer>
     </main>
@@ -302,7 +323,7 @@ function render(){
  document.querySelectorAll('[data-go]').forEach(b=>{b.onclick=()=>go(b.dataset.go)});
 }
 function showLoading(title='Cargando',subtitle='Preparando módulo…',duration=650){const screen=$('loadingScreen');$('loadingTitle').textContent=title;$('loadingSubtitle').textContent=subtitle;screen.classList.remove('is-hidden');clearTimeout(window.asloLoadingTimer);window.asloLoadingTimer=setTimeout(()=>screen.classList.add('is-hidden'),duration)}
-function go(p){if(p==='users'&&role!=='admin')p='dashboard';page=p;render();if(p==='users')loadRealProfiles();const title=({dashboard:'Resumen general',candidates:'Expedientes',capture:'Registro de candidato',evaluations:'Evaluaciones',reports:'Reportes',users:'Usuarios evaluadores'})[p]||'Módulo';showLoading('Cargando',title,700);window.scrollTo({top:0,behavior:'smooth'})}
+function go(p){if((p==='users'||p==='reports')&&p==='users'&&role!=='admin')p='dashboard';page=p;render();if(p==='users')loadRealProfiles();if(p==='reports')updatePdfPreview();const title=({dashboard:'Resumen general',candidates:'Expedientes',capture:'Registro de candidato',evaluations:'Evaluaciones',reports:'Reportes',users:'Usuarios evaluadores'})[p]||'Módulo';showLoading('Cargando',title,700);window.scrollTo({top:0,behavior:'smooth'})}
 // El rol proviene del perfil verificado en Supabase; no se puede cambiar desde la interfaz.
 document.querySelectorAll('#nav button').forEach(b=>b.addEventListener('click',()=>go(b.dataset.page)));
 $('candidateForm').addEventListener('submit',e=>{e.preventDefault();const name=$('candidateName').value.trim(),folio=$('folio').value.trim();$('formToast').style.display='block';$('formToast').textContent=`Demostración correcta: se capturaron visualmente los datos de ${name} (${folio}). No se guardaron ni se enviaron a Supabase.`;});
@@ -356,6 +377,70 @@ function renderBranchFormats(){const map=getBranchFormats();const branch=$('requ
 $('requestBranch')?.addEventListener('change',renderBranchFormats);
 $('saveBranchFormats')?.addEventListener('click',()=>{const name=$('configBranch').value.trim();const nums=[...document.querySelectorAll('.format-check:checked')].map(x=>Number(x.value));if(!name||!nums.length){$('branchConfigMessage').textContent='Escribe una sucursal y selecciona al menos un formato.';return;}const map=getBranchFormats();map[name]=nums;saveBranchFormatsMap(map);if(![...$('requestBranch').options].some(o=>o.value===name))$('requestBranch').add(new Option(name,name));$('requestBranch').value=name;$('configBranch').value='';document.querySelectorAll('.format-check').forEach(x=>x.checked=false);$('branchConfigMessage').textContent='Asignación guardada en este navegador.';renderBranchFormats();});
 function collectEvaluation(){const branch=$('requestBranch').value;const map=getBranchFormats();const data={folio:$('evalFolio').value.trim(),candidato:$('evalCandidate').value.trim(),sucursal_solicitante:branch,formatos_solicitados:map[branch]||[],capturado_en:new Date().toISOString(),secciones:{}};document.querySelectorAll('#evaluationForms [data-group]').forEach(el=>{const g=el.dataset.group;data.secciones[g]??={};data.secciones[g][el.dataset.field]=el.value;});return data;}
+
+function isVerifiedAdmin(){
+ const verifiedRole=String(authenticatedProfile?.role||'').toLowerCase();
+ return !!authenticatedUser && !!authenticatedProfile && authenticatedProfile.active===true &&
+  ['admin','administrator','administrador'].includes(verifiedRole);
+}
+function updatePdfPreview(){
+ if(!isVerifiedAdmin())return;
+ $('pdfFolioPreview').value=$('evalFolio').value.trim();
+ $('pdfCandidatePreview').value=$('evalCandidate').value.trim();
+}
+function printCandidatePdf(){
+ const toast=$('pdfToast');
+ if(!isVerifiedAdmin()){
+  toast.style.display='block';toast.textContent='Acceso denegado. Solo un administrador autenticado puede generar reportes.';return;
+ }
+ const data=collectEvaluation();
+ if(!data.folio){toast.style.display='block';toast.textContent='Captura el folio del candidato en el módulo Evaluaciones antes de generar el PDF.';return;}
+ if(!data.candidato){toast.style.display='block';toast.textContent='Captura el nombre del candidato antes de generar el PDF.';return;}
+ const printableGroups=evaluationGroups.filter(g=>(data.secciones[g.key]||{}));
+ const esc=s=>escapeHtml(s==null?'':String(s));
+ const sectionHtml=printableGroups.map(group=>{
+  const values=data.secciones[group.key]||{};
+  const rows=group.fields.map(field=>{
+   const value=String(values[field]||'').trim();
+   return `<tr><th>${esc(field)}</th><td>${value?esc(value).replace(/\n/g,'<br>'):'—'}</td></tr>`;
+  }).join('');
+  return `<section class="report-section"><h2>${esc(group.title)}</h2><table>${rows}</table></section>`;
+ }).join('');
+ const generated=new Date().toLocaleString('es-MX',{dateStyle:'long',timeStyle:'short'});
+ const doc=`<!DOCTYPE html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reporte ${esc(data.folio)} · ASLO PROSEGUR</title>
+ <style>
+ *{box-sizing:border-box}body{font-family:Arial,sans-serif;color:#17283a;margin:0;background:#fff;font-size:10pt}
+ .page{max-width:900px;margin:0 auto;padding:28px}
+ header{border-bottom:4px solid #173e67;padding:0 0 15px;margin-bottom:20px;display:flex;justify-content:space-between;align-items:center}
+ .brand{font-size:20px;font-weight:800;color:#173e67}.brand small{display:block;font-size:10px;color:#536579;font-weight:500;margin-top:4px}
+ .meta{text-align:right;font-size:9pt;color:#536579;line-height:1.6}
+ h1{font-size:19pt;margin:8px 0;color:#173e67}h2{font-size:12pt;background:#edf3f8;color:#173e67;padding:9px;margin:18px 0 0;border:1px solid #d8e2ec}
+ .candidate{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:12px;border:1px solid #d8e2ec;border-radius:6px}
+ .candidate div{padding:3px}.candidate b{display:block;font-size:8pt;color:#607286;margin-bottom:3px}
+ table{width:100%;border-collapse:collapse;font-size:9pt}th,td{border:1px solid #d8e2ec;padding:7px;text-align:left;vertical-align:top}th{width:34%;background:#f7f9fb;color:#34495e}
+ .report-section{break-inside:auto}.report-section tr{break-inside:avoid}
+ footer{margin-top:24px;border-top:1px solid #d8e2ec;padding-top:10px;color:#66788a;font-size:8pt;display:flex;justify-content:space-between}
+ .signatures{display:grid;grid-template-columns:1fr 1fr;gap:50px;margin:55px 20px 20px;text-align:center}.signatures div{border-top:1px solid #526477;padding-top:8px;font-size:9pt}
+ @page{size:A4;margin:14mm}
+ @media print{.page{padding:0;max-width:none}header{-webkit-print-color-adjust:exact;print-color-adjust:exact}h2,th{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+ </style></head><body><main class="page">
+ <header><div class="brand">ASLO · PROSEGUR<small>Sistema integral de evaluaciones · Reporte de reclutamiento</small></div><div class="meta">Folio: <b>${esc(data.folio)}</b><br>Sucursal: ${esc(data.sucursal_solicitante)}<br>Generado: ${esc(generated)}</div></header>
+ <h1>Expediente de evaluación del candidato</h1>
+ <div class="candidate"><div><b>NOMBRE DEL CANDIDATO</b>${esc(data.candidato)}</div><div><b>FOLIO</b>${esc(data.folio)}</div><div><b>SUCURSAL SOLICITANTE</b>${esc(data.sucursal_solicitante)}</div><div><b>FORMATOS ASIGNADOS</b>${data.formatos_solicitados.map(n=>'Formato '+esc(n)).join(', ')||'No especificados'}</div></div>
+ ${sectionHtml}
+ <div class="signatures"><div>Nombre y firma del evaluador</div><div>Nombre y firma de autorización</div></div>
+ <footer><span>Documento confidencial · Uso interno autorizado</span><span>ASLO · PROSEGUR</span></footer>
+ </main><script>window.addEventListener('load',()=>setTimeout(()=>window.print(),350));<\/script></body></html>`;
+ const win=window.open('','_blank');
+ if(!win){toast.style.display='block';toast.textContent='El navegador bloqueó la ventana. Permite ventanas emergentes para este sitio e inténtalo nuevamente.';return;}
+ win.document.open();win.document.write(doc);win.document.close();
+ toast.style.display='block';toast.textContent='Reporte preparado. En el diálogo de impresión selecciona “Guardar como PDF” o tu impresora.';
+}
+$('refreshPdfPreview')?.addEventListener('click',updatePdfPreview);
+$('printCandidatePdf')?.addEventListener('click',printCandidatePdf);
+$('evalFolio')?.addEventListener('input',updatePdfPreview);
+$('evalCandidate')?.addEventListener('input',updatePdfPreview);
+
 buildEvaluationForms();renderBranchFormats();
 $('exportEvaluation')?.addEventListener('click',()=>{const data=collectEvaluation();if(!data.folio){$('evaluationToast').style.display='block';$('evaluationToast').textContent='Escribe el folio para identificar el expediente.';return;}if(!data.formatos_solicitados.length){$('evaluationToast').style.display='block';$('evaluationToast').textContent='Asigna al menos un formato a la sucursal antes de exportar.';return;}const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=`ASLO_${data.sucursal_solicitante.replace(/[^a-zA-Z0-9_-]/g,'_')}_${data.folio.replace(/[^a-zA-Z0-9_-]/g,'_')}.json`;a.click();URL.revokeObjectURL(url);$('evaluationToast').style.display='block';$('evaluationToast').textContent=`Borrador exportado para ${data.sucursal_solicitante}, con formatos ${data.formatos_solicitados.join(' y ')}. Aún no se ha guardado en Supabase ni se han generado los formatos PDF finales.`;});
 $('clearEvaluation')?.addEventListener('click',()=>{document.querySelectorAll('#evaluationForms input,#evaluationForms textarea').forEach(el=>el.value='');$('evalFolio').value='';$('evalCandidate').value='';$('evaluationToast').style.display='none';});
